@@ -36,7 +36,7 @@ public class ParentActivity extends AppCompatActivity {
      * @param s
      */
     protected void addSubscription(Subscription s) {
-        if(!Utils.hasClass("rx")){
+        if(!Utils.hasClass("rx.subscriptions.CompositeSubscription")){
             throw new IllegalArgumentException("you must add rxjava and rxandroid library to this project");
         }else{
             if (this.mCompositeSubscription == null) {
@@ -50,7 +50,7 @@ public class ParentActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //恢复状态
-        if(Utils.hasClass("icepick")){
+        if(Utils.hasClass("icepick.Icepick")){
             Icepick.restoreInstanceState(this, savedInstanceState);
         }
         mHandler=new WeakReferenceHandler(this);
@@ -60,7 +60,7 @@ public class ParentActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         //保存状态
-        if(Utils.hasClass("icepick")){
+        if(Utils.hasClass("icepick.Icepick")){
             Icepick.saveInstanceState(this, outState);
         }
     }
@@ -68,14 +68,14 @@ public class ParentActivity extends AppCompatActivity {
     //-----------友盟统计-----start
     public void onResume() {
         super.onResume();
-        if(Utils.hasClass("com.umeng.analytics")){
+        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
             MobclickAgent.onResume(this); // 统计时长
         }
     }
 
     public void onPause() {
         super.onPause();
-        if(Utils.hasClass("com.umeng.analytics")){
+        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
             MobclickAgent.onPause(this);
         }
     }
@@ -85,7 +85,7 @@ public class ParentActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         //取消订阅，防止rx内存泄露
-        if (Utils.hasClass("rx") && this.mCompositeSubscription != null) {
+        if (Utils.hasClass("rx.subscriptions.CompositeSubscription") && this.mCompositeSubscription != null) {
             this.mCompositeSubscription.unsubscribe();
             this.mCompositeSubscription=null;
         }

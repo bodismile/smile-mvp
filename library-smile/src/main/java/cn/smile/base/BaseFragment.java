@@ -40,7 +40,7 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
     @Override
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
-        if(Utils.hasClass("icepick")){
+        if(Utils.hasClass("icepick.Icepick")){
             Icepick.saveInstanceState(this, bundle);
         }
     }
@@ -57,23 +57,25 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(Utils.hasClass("icepick")){
+        if(Utils.hasClass("icepick.Icepick")){
             Icepick.restoreInstanceState(this, savedInstanceState);
         }
-        ButterKnife.bind(this, view);
+        if(Utils.hasClass("butterknife.ButterKnife")){
+            ButterKnife.bind(this,view);
+        }
     }
 
     //-----------友盟统计-----start
     public void onResume() {
         super.onResume();
-        if(Utils.hasClass("com.umeng.analytics")){
+        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
             MobclickAgent.onPageStart(getClass().getName()); //统计页面
         }
     }
 
     public void onPause() {
         super.onPause();
-        if(Utils.hasClass("com.umeng.analytics")){
+        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
             MobclickAgent.onPageEnd(getClass().getName());
         }
     }
@@ -84,7 +86,9 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
         super.onDestroyView();
         if (mPresenter != null)
             mPresenter.onDestroy();
-        ButterKnife.unbind(this);
+        if(Utils.hasClass("butterknife.ButterKnife")){
+            ButterKnife.unbind(this);
+        }
         //取消handler订阅，防止内存泄露
         if(mHandler!=null){
             mHandler.removeCallbacksAndMessages(null);
