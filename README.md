@@ -27,7 +27,7 @@ repositories {
 ```
 2.在用到的项目中添加依赖
 
-compile 'com.github.bodismile:smile-mvp:[Last Version](https://github.com/bodismile/smile-mvp/releases)' (<-click it)   
+compile 'com.github.bodismile:smile-mvp:[Last Version](https://github.com/bodismile/smile-mvp/releases) (<-click it)   
 
 ## 在线文档
 
