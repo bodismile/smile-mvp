@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingMode="stack">
+    <item>
+        <shape>
+            <size
+                android:width="@dimen/dimen_50"
+                android:height="@dimen/dimen_50" />
+            <solid android:color="@color/color_gray" />
+        </shape>
+    </item>
+    <item
+        android:right="@dimen/dimen_30"
+        android:top="@dimen/dimen_30">
+        <shape>
+            <size
+                android:width="@dimen/dimen_20"
+                android:height="@dimen/dimen_20" />
+            <solid android:color="@color/color_white" />
+        </shape>
+    </item>
+    <item
+        android:bottom="@dimen/dimen_30"
+        android:right="@dimen/dimen_30">
+        <shape>
+            <size
+                android:width="@dimen/dimen_20"
+                android:height="@dimen/dimen_20" />
+            <solid android:color="@color/color_white" />
+        </shape>
+    </item>
+
+    <item
+        android:bottom="@dimen/dimen_30"
+        android:left="@dimen/dimen_30">
+        <shape>
+            <size
+                android:width="@dimen/dimen_20"
+                android:height="@dimen/dimen_20" />
+            <solid android:color="@color/color_white" />
+        </shape>
+    </item>
+
+    <item
+        android:left="@dimen/dimen_30"
+        android:top="@dimen/dimen_30">
+        <shape>
+            <size
+                android:width="@dimen/dimen_20"
+                android:height="@dimen/dimen_20" />
+            <solid android:color="@color/color_white" />
+        </shape>
+    </item>
+</layer-list>

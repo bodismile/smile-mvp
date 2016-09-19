@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:background="@color/color_dialog_bg"
+    android:paddingLeft="@dimen/dimen_27"
+    android:paddingRight="@dimen/dimen_27"
+    android:layout_height="@dimen/dimen_45">
+
+    <TextView
+        android:id="@+id/tv_wheel_cancel"
+        style="@style/style_text_blue"
+        android:layout_width="@dimen/dimen_50"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:text="取消"
+        />
+    <TextView
+        android:id="@+id/tv_wheel_title"
+        style="@style/style_text_gray82"
+        tools:text="选择擅长领域（最多三个）"
+        android:layout_centerInParent="true"
+        android:textSize="@dimen/font_16"
+        />
+    <TextView
+        android:id="@+id/tv_wheel_confirm"
+        style="@style/style_text_blue"
+        android:layout_centerVertical="true"
+        android:layout_height="match_parent"
+        android:layout_width="@dimen/dimen_50"
+        android:text="确定"
+        android:layout_alignParentRight="true"
+        />
+</RelativeLayout>

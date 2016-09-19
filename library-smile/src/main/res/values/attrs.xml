@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 标题栏自定义属性 -->
+    <declare-styleable name="TitleBar">
+        <!--背景色 -->
+        <attr name="titleBg" format="color|reference"/>
+        <!-- 标题文案 -->
+        <attr name="titleText" format="string|reference"/>
+        <!-- 标题颜色 可选-->
+        <attr name="titleColor" format="color|reference"/>
+        <!-- 标题文字大小-->
+        <attr name="titleSize" format="dimension|reference"/>
+
+        <!-- 左边按钮图片id -->
+        <attr name="leftResId" format="color|reference"/>
+        <!-- 是否有隐藏左边按钮-->
+        <attr name="leftVisible" format="boolean"/>
+        <!-- 左边文字 -->
+        <attr name="leftText" format="string|reference"/>
+        <!-- 左边文字颜色-->
+        <attr name="leftTextColor" format="color|reference"/>
+        <!-- 左侧文字大小-->
+        <attr name="leftTextSize" format="dimension|reference"/>
+
+        <!-- 右侧更多的图片id -->
+        <attr name="rightResId" format="color|reference"/>
+        <!-- 右侧更多功能按钮文字 -->
+        <attr name="rightText" format="string|reference"/>
+        <!-- 右侧文字颜色-->
+        <attr name="rightTextColor" format="color|reference"/>
+        <!-- 右侧文字大小-->
+        <attr name="rightTextSize" format="dimension|reference"/>
+
+    </declare-styleable>
+
+    <declare-styleable name="PagerSlidingTabStrip">
+        <attr name="pstsTextNormalColor" format="color" />
+        <attr name="pstsTextFocusColor" format="color" />
+        <attr name="pstsIndicatorColor" format="color" />
+        <attr name="pstsUnderlineColor" format="color" />
+        <attr name="pstsDividerColor" format="color" />
+        <attr name="pstsIndicatorHeight" format="dimension" />
+        <attr name="pstsUnderlineHeight" format="dimension" />
+        <attr name="pstsDividerPadding" format="dimension" />
+        <attr name="pstsTabPaddingLeftRight" format="dimension" />
+        <attr name="pstsScrollOffset" format="dimension" />
+        <attr name="pstsTabBackground" format="reference" />
+        <attr name="pstsShouldExpand" format="boolean" />
+        <attr name="pstsTextAllCaps" format="boolean" />
+    </declare-styleable>
+
+    <!-- CircularProgress Attribute -->
+    <declare-styleable name="CircularProgress">
+        <attr name="circular_progress_color" format="color"/>
+        <attr name="circular_progress_size" format="enum">
+            <enum name="Small" value="0"/>
+            <enum name="Normal" value="1"/>
+            <enum name="Large" value="2"/>
+        </attr>
+        <attr name="circular_progress_border_width" format="dimension"/>
+        <attr name="circular_progress_indeterminate" format="boolean"/>
+        <attr name="circular_progress_max" format="integer"/>
+        <attr name="circular_progress_duration" format="integer"/>
+    </declare-styleable>
+
+    <!--ClearEditText自定义属性 -->
+    <declare-styleable name="ClearEditText">
+        <attr name="clearIcon" format="reference"/>
+    </declare-styleable>
+
+    <!--MultiStateView自定义属性 -->
+    <declare-styleable name="MultiStateView">
+        <attr name="msv_loadingView" format="reference" />
+        <attr name="msv_emptyView" format="reference" />
+        <attr name="msv_errorView" format="reference" />
+        <attr name="msv_viewState" format="enum">
+            <enum name="content" value="0" />
+            <enum name="error" value="1" />
+            <enum name="empty" value="2" />
+            <enum name="loading" value="3" />
+        </attr>
+        <attr name="msv_animateViewChanges" format="boolean" />
+    </declare-styleable>
+
+</resources>

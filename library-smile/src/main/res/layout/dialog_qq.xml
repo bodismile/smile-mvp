@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_transparent"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <TextView
+        android:id="@+id/tv_title"
+        style="@style/style_text_gray82"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_50"
+        android:background="@drawable/actionsheet_top_selector"
+        android:text="@string/string_tab_1"
+        />
+
+    <TextView
+        android:id="@+id/tv_item1"
+        style="@style/style_text_black"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_50"
+        android:background="@drawable/actionsheet_middle_selector"
+        android:text="@string/string_tab_1"
+        />
+
+    <TextView
+        android:id="@+id/tv_item2"
+        style="@style/style_text_black"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_50"
+        android:background="@drawable/actionsheet_middle_selector"
+        android:text="@string/string_tab_1"
+        />
+    <TextView
+        android:id="@+id/tv_item3"
+        style="@style/style_text_black"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_50"
+        android:background="@drawable/actionsheet_bottom_selector"
+        android:text="@string/string_tab_1"
+        />
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        style="@style/style_text_blue"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_50"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/actionsheet_single_selector"
+        android:text="@string/cancel"
+        />
+
+</LinearLayout>
