@@ -5,6 +5,5 @@
 .DS_Store
 /build
 /app
-/library-pullrefresh
 *.iml
 /.idea

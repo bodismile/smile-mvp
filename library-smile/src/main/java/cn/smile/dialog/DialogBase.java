@@ -1,9 +1,10 @@
 package cn.smile.dialog;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -20,44 +21,45 @@ import android.widget.TextView;
 import cn.smile.R;
 
 /**自定义对话框基类
- * @author  smile
- * @date  2015-08-07-10:56
+ * @author smile
+ * @date 2015-08-07-10:56
  * 可自由控制上中下布局，允许自定义对话框，一个button或两个
  */
 public abstract class DialogBase extends Dialog {
 
 	protected Context mContext;
+	/**
+	 * 确定监听
+	 */
 	protected OnClickListener onSuccessListener;
-	protected OnClickListener onCancelListener;//提供给取消按钮
+	/**
+	 * 取消监听
+	 */
+	protected OnClickListener onCancelListener;
+	/**
+	 * 消失监听
+	 */
 	protected OnDismissListener onDismissListener;
-	//自定义view
+	/**
+	 * 中间的view
+	 */
 	protected View view;
 	protected Button positiveButton, negativeButton;
 	private boolean isFullScreen = false;
-	
-	private LinearLayout ll_bottom;
-	
+	private LinearLayout dialog_bottom;
+
 	private boolean hasTitle = true;//是否有title
 	private boolean hasBottom = true;//是否有bottom
-	
-	private int width = 0, height = 0, x = 0, y = 0;
-	private String content, title;
-	private int color=0;
-
-	private String namePositiveButton, nameNegativeButton;
-	private int bgColor=0,positiveColor=0,negativeColor=0;
-
-	private final int MATCH_PARENT = android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-
 	private boolean isCancel = true;//默认是否可点击back按键/点击外部区域取消对话框
 
-	public boolean isCancel() {
-		return isCancel;
-	}
+	private int width = 0, height = 0;
+	private String content, title;
+	private String namePositiveButton, nameNegativeButton;
+	private Drawable bgColor;
 
-	public void setCancel(boolean isCancel) {
-		this.isCancel = isCancel;
-	}
+	private int titleColor =0,positiveColor=0,negativeColor=0;
+
+	private final int MATCH_PARENT = android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 	/**
 	 * 构造函数
@@ -67,9 +69,8 @@ public abstract class DialogBase extends Dialog {
 		super(context, R.style.Dialog_Theme);
 		this.mContext = context;
 	}
-	
-	  
-	/**自定义dialog主题  
+
+	/**自定义dialog主题
 	 * @param context
 	 * @param theme  
 	 */
@@ -77,11 +78,7 @@ public abstract class DialogBase extends Dialog {
 		super(context,theme);
 		this.mContext = context;
 	}
-	
-	/** 
-	 * 创建事件
-	 */
-	@SuppressLint("InlinedApi")
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -89,10 +86,16 @@ public abstract class DialogBase extends Dialog {
 		this.onBuilding();
 		//设置背景
 		LinearLayout ll_dialog = (LinearLayout)findViewById(R.id.ll_dialog);
-		if(bgColor!=0){
-			ll_dialog.setBackgroundColor(bgColor);
+		Drawable bg;
+		if(bgColor!=null){
+			bg = bgColor;
 		}else{
-			ll_dialog.setBackground(getContext().getResources().getDrawable(R.drawable.dialog_bg));
+			bg = getContext().getResources().getDrawable(R.drawable.dialog_bg);
+		}
+		if(Build.VERSION.SDK_INT< Build.VERSION_CODES.JELLY_BEAN){
+			ll_dialog.setBackgroundDrawable(bg);
+		}else{
+			ll_dialog.setBackground(bg);
 		}
 		// 设置标题和消息
 		RelativeLayout dialog_top = (RelativeLayout)findViewById(R.id.dialog_top);
@@ -105,15 +108,13 @@ public abstract class DialogBase extends Dialog {
 		//标题
 		TextView titleTextView = (TextView)findViewById(R.id.dialog_title);
 		titleTextView.setText(this.getTitle());
-
-		if(this.getTitleColor()>0){
+		if(getTitleColor()>0){
 			titleTextView.setTextColor(this.getTitleColor());
 		}else{
 			titleTextView.setTextColor(getContext().getResources().getColor(R.color.color_1e1e1e));
 		}
 		//内容
 		TextView content = (TextView)findViewById(R.id.dialog_message);
-
 		if(!TextUtils.isEmpty(getContent())){
 			if(!hasTitle){
 				content.setGravity(Gravity.CENTER);
@@ -127,7 +128,6 @@ public abstract class DialogBase extends Dialog {
 			findViewById(R.id.dialog_contentPanel).setVisibility(View.GONE);
 			findViewById(R.id.dialog_customPanel).setVisibility(View.VISIBLE);
 		}
-
 		//是否包含自定义的内容view
 		if (view != null) {
 			FrameLayout custom = (FrameLayout) findViewById(R.id.dialog_custom);
@@ -139,11 +139,11 @@ public abstract class DialogBase extends Dialog {
 			findViewById(R.id.dialog_customPanel).setVisibility(View.GONE);
 		}
 		//底部布局
-		ll_bottom = (LinearLayout)findViewById(R.id.dialog_bottom);
+		dialog_bottom = (LinearLayout)findViewById(R.id.dialog_bottom);
 		if(hasBottom){
-			ll_bottom.setVisibility(View.VISIBLE);
+			dialog_bottom.setVisibility(View.VISIBLE);
 		}else{
-			ll_bottom.setVisibility(View.GONE);
+			dialog_bottom.setVisibility(View.GONE);
 		}
 		//底部按钮
 		positiveButton = (Button)findViewById(R.id.dialog_positivebutton);
@@ -182,10 +182,6 @@ public abstract class DialogBase extends Dialog {
 		if(this.getHeight()>0){
 			params.height = this.getHeight();
 		}
-		if(this.getX()>0)
-			params.width = this.getX();
-		if(this.getY()>0)
-			params.height = this.getY();
 		// 如果设置为全屏
 		if(isFullScreen) {
 			params.width = LayoutParams.MATCH_PARENT;
@@ -303,6 +299,14 @@ public abstract class DialogBase extends Dialog {
 	 */
 	protected abstract void onDismiss();
 
+	public boolean isCancel() {
+		return isCancel;
+	}
+
+	public void setCancel(boolean isCancel) {
+		this.isCancel = isCancel;
+	}
+
 	/**
 	 * @return 对话框标题
 	 */
@@ -315,21 +319,20 @@ public abstract class DialogBase extends Dialog {
 	 */
 	public void setTitle(String title) {
 		this.title = title;
-		
 	}
 	
 	/**
 	 * @return 对话框标题颜色
 	 */
 	public int getTitleColor() {
-		return color;
+		return titleColor;
 	}
 	
 	/**
 	 * @param color 对话框标题颜色
 	 */
 	public void setTitleColor(int color) {
-		this.color = color;
+		this.titleColor = color;
 	}
 	
 	/**
@@ -365,11 +368,11 @@ public abstract class DialogBase extends Dialog {
 	/**背景色
 	 * @return
 	 */
-	public int getBgColor() {
+	public Drawable getBgColor() {
 		return bgColor;
 	}
 
-	public void setBgColor(int bgColor) {
+	public void setBgColor(Drawable bgColor) {
 		this.bgColor = bgColor;
 	}
 
@@ -404,7 +407,6 @@ public abstract class DialogBase extends Dialog {
 	public boolean isHasTitle() {
 		return hasTitle;
 	}
-
 
 	public void setHasTitle(boolean hasTitle) {
 		this.hasTitle = hasTitle;
@@ -447,34 +449,6 @@ public abstract class DialogBase extends Dialog {
 	}
 
 	/**
-	 * @return 对话框X坐标
-	 */
-	public int getX() {
-		return x;
-	}
-
-	/**
-	 * @param x 对话框X坐标
-	 */
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	/**
-	 * @return 对话框Y坐标
-	 */
-	public int getY() {
-		return y;
-	}
-
-	/**
-	 * @param y 对话框Y坐标
-	 */
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	/**
 	 * @return 确认按钮名称
 	 */
 	protected String getPositiveButtonText() {
@@ -501,4 +475,5 @@ public abstract class DialogBase extends Dialog {
 	protected void setNegativeButtonText(String nameNegativeButton) {
 		this.nameNegativeButton = nameNegativeButton;
 	}
+
 }

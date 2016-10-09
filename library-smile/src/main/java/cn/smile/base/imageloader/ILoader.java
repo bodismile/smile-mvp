@@ -2,6 +2,7 @@ package cn.smile.base.imageloader;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -36,11 +37,14 @@ public interface ILoader {
      * 暂停
      * @param activity
      */
-    void pause(Activity activity);
+    void pause(Context activity);
     /**
      * 恢复加载
      * @param activity
      */
-    void resume(Activity activity);
-
+    void resume(Context activity);
+    /**
+     * 清除缓存
+     */
+    void clearCache(Context activity);
 }

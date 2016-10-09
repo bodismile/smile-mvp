@@ -1,6 +1,6 @@
 package cn.smile.base.imageloader;
 
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
@@ -79,12 +79,20 @@ public class GlideImageLoader extends AbsImageLoader {
     }
 
     @Override
-    public void pause(Activity activity) {
-        Glide.with(activity).pauseRequests();
+    public void pause(Context context) {
+        Glide.with(context).pauseRequests();
     }
 
     @Override
-    public void resume(Activity activity) {
-        Glide.with(activity).resumeRequestsRecursive();
+    public void resume(Context context) {
+        Glide.with(context).resumeRequestsRecursive();
+    }
+
+    @Override
+    public void clearCache(Context context) {
+        Glide.get(context).clearMemory();
+        Glide.get(context).clearDiskCache();
     }
 }
+
+

@@ -12,13 +12,14 @@ import cn.smile.base.mvp.BasePresenter;
 /**封装导航条操作的Fragment
  * @author smile
  * @date 2015-08-07-11:08
+ * 适用单一Fragment，通用导航条
  */
 public abstract class BaseFragmentWithNavi<T extends BasePresenter, E extends BaseModel> extends BaseNaviFragment<T,E> {
 
-    protected View rootView;
+    protected View mView;
 
     @Override
-    public int getLayoutId() {
+    public int rootLayoutId() {
         return R.layout.base_with_navi;
     }
 
@@ -27,10 +28,10 @@ public abstract class BaseFragmentWithNavi<T extends BasePresenter, E extends Ba
         //导航栏
         initNaviView();
         //获取容器
-        FrameLayout container = (FrameLayout) view.findViewById(R.id.container);
+        FrameLayout container = (FrameLayout) mRootView.findViewById(R.id.container);
         //将子布局添加到container中
-        rootView =layout(inflater,container);
-        container.addView(view, -1, -1);
+        mView =layout(inflater,container);
+        container.addView(mView, -1, -1);
     }
 
     /**
@@ -39,7 +40,7 @@ public abstract class BaseFragmentWithNavi<T extends BasePresenter, E extends Ba
      * @return
      */
     protected <T extends View> T findView(int id) {
-        return (T) rootView.findViewById(id);
+        return (T) mView.findViewById(id);
     }
 
     /**

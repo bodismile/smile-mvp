@@ -8,16 +8,17 @@ import cn.smile.R;
 import cn.smile.base.mvp.BaseModel;
 import cn.smile.base.mvp.BasePresenter;
 
-/**内部封装导航条
+/**内部封装导航条的Activity
  * @author smile
  * @date 2015-08-07-11:08
+ * 适合单一Activity，通用导航条
  */
 public abstract  class BaseActivityWithNavi<T extends BasePresenter, E extends BaseModel> extends BaseNaviActivity<T,E> {
 
 	protected View view;
 
 	@Override
-	public int getLayoutId() {
+	public int rootLayoutId() {
 		return R.layout.base_with_navi;
 	}
 
@@ -41,7 +42,7 @@ public abstract  class BaseActivityWithNavi<T extends BasePresenter, E extends B
 	}
 
 	/**
-	 * 获取当前View
+	 * 获取当前布局view
 	 * @return
      */
 	protected abstract View layout(LayoutInflater inflater);

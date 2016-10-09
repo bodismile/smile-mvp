@@ -25,8 +25,10 @@ import rx.subscriptions.CompositeSubscription;
  */
 public class ParentActivity extends AppCompatActivity {
 
+    /**
+     * Handler
+     */
     protected Handler mHandler;
-
     /**
      * Observable(被观察者)在subscribe()之后会持有 Subscriber(Observer的) 的引用，这个引用如果不能及时被释放，将有内存泄露的风险
      */
@@ -66,19 +68,19 @@ public class ParentActivity extends AppCompatActivity {
     }
 
     //-----------友盟统计-----start
-    public void onResume() {
-        super.onResume();
-        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
-            MobclickAgent.onResume(this); // 统计时长
-        }
-    }
-
-    public void onPause() {
-        super.onPause();
-        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
-            MobclickAgent.onPause(this);
-        }
-    }
+//    public void onResume() {
+//        super.onResume();
+//        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
+//            MobclickAgent.onResume(this); // 统计时长
+//        }
+//    }
+//
+//    public void onPause() {
+//        super.onPause();
+//        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
+//            MobclickAgent.onPause(this);
+//        }
+//    }
     //-----------友盟统计-----end
 
     @Override
@@ -103,10 +105,18 @@ public class ParentActivity extends AppCompatActivity {
     private Toast toast;
     protected final static String NULL = "";
 
+    /**
+     * toast
+     * @param resId string资源id
+     */
     public void toast(int resId){
         toast(getResources().getString(resId));
     }
 
+    /**
+     * toast
+     * @param obj
+     */
     public void toast(final Object obj) {
         try {
             runOnMain(new Runnable() {
@@ -182,6 +192,9 @@ public class ParentActivity extends AppCompatActivity {
      */
     public void processMessage(Message msg) {}
 
+    /**
+     * Handler静态内部类
+     */
     static class WeakReferenceHandler extends Handler {
 
         private final WeakReference<ParentActivity> instance;

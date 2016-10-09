@@ -16,14 +16,16 @@ import cn.smile.base.mvp.BasePresenter;
 /**内部封装导航条且允许Fragment内部切换
  * @author smile
  * @date 2015-08-07-11:08
+ * 一般用于一个Activity,内部几个Fragment且公用一个导航条，根据操作切换不同的Fragment
  */
 public abstract  class BaseActivityWithNaviAndFragment<T extends BasePresenter, E extends BaseModel> extends BaseNaviActivity<T,E> {
 
 	protected View view;
+
 	protected List<Fragment> fragments;
 
 	@Override
-	public int getLayoutId() {
+	public int rootLayoutId() {
 		return R.layout.base_with_navi;
 	}
 
@@ -47,16 +49,16 @@ public abstract  class BaseActivityWithNaviAndFragment<T extends BasePresenter, 
 	}
 
 	/**
-	 * 获取当前View
+	 * 当前的布局
 	 * @return
      */
 	protected abstract View layout(LayoutInflater inflater);
 
 	/**
-	 * 替换的内容view
+	 * 用来替换Fragment的容器id
 	 * @return
      */
-	protected abstract int fragmentLayout();
+	protected abstract int containerId();
 
 	public void addFragment(Fragment... fragments) {
 		if (this.fragments == null)
@@ -64,7 +66,7 @@ public abstract  class BaseActivityWithNaviAndFragment<T extends BasePresenter, 
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		for (Fragment fragment : fragments)
 			if (!this.fragments.contains(fragment)) {
-				transaction.add(fragmentLayout(), fragment);
+				transaction.add(containerId(), fragment);
 				this.fragments.add(fragment);
 			}
 		transaction.commit();

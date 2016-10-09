@@ -1,6 +1,8 @@
 package cn.smile.util;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -9,6 +11,8 @@ import android.graphics.drawable.Drawable;
 import java.io.InputStream;
 import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
+
+import cn.smile.SmileConfig;
 
 /**
  * 工具类:包含dp-px互转等方法
@@ -65,7 +69,9 @@ public final class Utils {
             Class.forName(className);
             return true;
         } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
+            if(SmileConfig.DEBUG){
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -140,6 +146,43 @@ public final class Utils {
         BigDecimal b = new BigDecimal(Double.toString(v));
         BigDecimal one = new BigDecimal("1");
         return b.divide(one,scale,BigDecimal.ROUND_HALF_UP).intValue();
+    }
+
+    /**
+     * 获取app的版本数versionCode
+     * @return
+     */
+    public static int getVersionCode(Context context) {
+        int result = 0;
+        PackageInfo info = getPackageInfo(context);
+        if(info!=null){
+            result = info.versionCode;
+        }
+        return result;
+    }
+
+    /**
+     * 获取app的版本名versionName
+     * @return
+     */
+    public static String getVersionName(Context context) {
+        PackageInfo info = getPackageInfo(context);
+        String result = null;
+        if(info!=null){
+            result = info.versionName;
+        }
+        return result;
+    }
+
+    private static PackageInfo getPackageInfo(Context context) {
+        PackageInfo pi = null;
+        try {
+            PackageManager pm = context.getApplicationContext().getPackageManager();
+            pi = pm.getPackageInfo(context.getPackageName(),0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return pi;
     }
 
 }

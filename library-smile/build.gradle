@@ -7,13 +7,13 @@ group='com.github.bodismile'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.3'
+    buildToolsVersion '23.0.1'
 
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.1"
     }
 
     buildTypes {
@@ -51,10 +51,13 @@ dependencies {
     testCompile 'junit:junit:4.12'
     provided 'com.android.support:appcompat-v7:23.2.0'
     provided 'com.android.support:support-v4:23.2.0'
+    provided 'com.android.support:recyclerview-v7:23.2.0'
     //视图加载
     provided 'com.jakewharton:butterknife:7.0.1'
-    //图片加载
+    //图片加载-glide
     provided 'com.github.bumptech.glide:glide:3.7.0'
+    //图片加载-uil
+    provided 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     //icepick:Android Instance状态保存与恢复
     provided 'frankiesardo:icepick:3.2.0'
     provided 'frankiesardo:icepick-processor:3.2.0'
@@ -63,6 +66,12 @@ dependencies {
     provided 'io.reactivex:rxandroid:1.2.0'
     //友盟统计
     provided 'com.umeng.analytics:analytics:latest.integration'
+    //pulltorefresh下拉刷新
+    provided 'com.github.bodismile:smile-pulltorefresh:1.0.0'
+    //BGARefresh下拉刷新
+    provided 'com.nineoldandroids:library:2.4.0'
+    provided 'cn.bingoogolapple:bga-refreshlayout:1.1.6@aar'
+    provided 'cn.bingoogolapple:bga-adapter:1.1.0@aar'
 }
 
 //-------------------------------------------

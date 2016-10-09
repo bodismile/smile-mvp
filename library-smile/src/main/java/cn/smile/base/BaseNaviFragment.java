@@ -28,11 +28,11 @@ public abstract class BaseNaviFragment<T extends BasePresenter, E extends BaseMo
      * 初始化导航条
      */
     public void initNaviView(){
-        ll_navi = (LinearLayout) view.findViewById(R.id.ll_navi);
-        tv_title = (TextView) view.findViewById(R.id.tv_title);
-        tv_right = (TextView) view.findViewById(R.id.tv_right);
-        ll_left = (LinearLayout) view.findViewById(R.id.ll_left);
-        iv_left = (ImageView) view.findViewById(R.id.iv_left);
+        ll_navi = (LinearLayout) mRootView.findViewById(R.id.ll_navi);
+        tv_title = (TextView) mRootView.findViewById(R.id.tv_title);
+        tv_right = (TextView) mRootView.findViewById(R.id.tv_right);
+        ll_left = (LinearLayout) mRootView.findViewById(R.id.ll_left);
+        iv_left = (ImageView) mRootView.findViewById(R.id.iv_left);
 
         setListener(setToolBarListener());
         ll_left.setOnClickListener(clickListener);

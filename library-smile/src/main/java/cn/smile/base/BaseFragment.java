@@ -34,7 +34,7 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
 
     public T mPresenter;
     public E mModel;
-    public View view;
+    public View mRootView;
     protected Handler mHandler;
 
     @Override
@@ -51,6 +51,10 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
         //通过反射获取presenter和Model
         mPresenter = Utils.getT(this, 0);
         mModel = Utils.getT(this, 1);
+        //将V和M绑定到P层
+        if(mPresenter!=null && mModel!=null){
+            mPresenter.bindVM(this,mModel);
+        }
         mHandler=new WeakReferenceHandler(this);
     }
 
@@ -66,19 +70,19 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
     }
 
     //-----------友盟统计-----start
-    public void onResume() {
-        super.onResume();
-        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
-            MobclickAgent.onPageStart(getClass().getName()); //统计页面
-        }
-    }
-
-    public void onPause() {
-        super.onPause();
-        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
-            MobclickAgent.onPageEnd(getClass().getName());
-        }
-    }
+//    public void onResume() {
+//        super.onResume();
+//        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
+//            MobclickAgent.onPageStart(getClass().getName()); //统计页面
+//        }
+//    }
+//
+//    public void onPause() {
+//        super.onPause();
+//        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
+//            MobclickAgent.onPageEnd(getClass().getName());
+//        }
+//    }
     //-----------友盟统计-----end
 
     @Override
@@ -98,10 +102,10 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(getLayoutId(),container,false);
+        mRootView = inflater.inflate(rootLayoutId(),container,false);
         this.initView(inflater);
-        this.initPresenter();
-        return view;
+        this.initData();
+        return mRootView;
     }
 
     /**
@@ -111,23 +115,23 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
      * @return
      */
     protected  <T extends View> T getView(int id) {
-        return (T) view.findViewById(id);
+        return (T) mRootView.findViewById(id);
     }
 
     /**
      * 设置当前布局layout
      * @return
      */
-    public abstract int getLayoutId();
+    public abstract int rootLayoutId();
     /**
      * 初始化View
      */
     public abstract void initView(LayoutInflater inflater);
 
     /**
-     * 绑定view和mode
+     * 初始化数据
      */
-    public abstract void initPresenter();
+    public void initData(){}
 
     //-----------------------------------------------------------------------------------------
 
@@ -150,6 +154,10 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
         return getActivity().getIntent().getBundleExtra(getActivity().getPackageName());
     }
 
+    /**
+     * 在主线程运行
+     * @param runnable
+     */
     protected void runOnMain(Runnable runnable) {
         getActivity().runOnUiThread(runnable);
     }
@@ -157,10 +165,18 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
     private Toast toast;
     protected final static String NULL = "";
 
+    /**
+     * toast
+     * @param resId string资源id
+     */
     public void toast(int resId){
         toast(getResources().getString(resId));
     }
 
+    /**
+     * toast
+     * @param obj
+     */
     public void toast(final Object obj) {
         try {
             runOnMain(new Runnable() {
@@ -180,7 +196,7 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
 
     /**
      * log
-     * @param msg
+     * @param msg log内容
      */
     public static void log(String msg){
         if(!TextUtils.isEmpty(msg)){

@@ -85,43 +85,22 @@ public final class DialogHelper {
     }
 
     /**
-     * 自定义title、content、双按钮文字
-     * @param context
-     * @param hasTwo
-     * @param content
-     * @param buttonText
-     * @param negetiveText
-     * @param listener
+     * Builder
+     * @param builder
      */
-    public static void showDialog(Context context, boolean hasTwo,String content,
-                                  String buttonText, String negetiveText,
-                                  DialogInterface.OnClickListener listener){
-        DialogTips tips =new DialogTips(context,hasTwo,"",content,buttonText,negetiveText);
-        tips.setOnSuccessListener(listener);
-        tips.setOnCancelListener(listener);
-        tips.show();
+    public static void showDialog(DialogTips.Builder builder){
+        DialogTips dialog =new DialogTips(builder);
+        dialog.show();
     }
 
-    /**自定义标题和内容
-     * @param context
-     * @param title
-     * @param content
-     * @param listener
-     */
-    public static void showDialog(Context context, String title, String content,
-                                  DialogInterface.OnClickListener listener){
-        DialogTips tips =new DialogTips(context,title,content);
+    public static void showDialog(Context context, String title, String content, DialogInterface.OnClickListener listener) {
+        DialogTips tips = new DialogTips(context, title, content);
         tips.setOnSuccessListener(listener);
         tips.show();
     }
 
-    /**无标题，单/双按钮
-     * @param context
-     * @param listener
-     */
-    public static void showDialog(Context context, boolean hasTwo, String content,
-                                  DialogInterface.OnClickListener listener){
-        DialogTips tips =new DialogTips(context,hasTwo,content);
+    public static void showDialog(Context context, boolean hasTwo, String content, DialogInterface.OnClickListener listener) {
+        DialogTips tips = new DialogTips(context, hasTwo, content);
         tips.setOnSuccessListener(listener);
         tips.show();
     }

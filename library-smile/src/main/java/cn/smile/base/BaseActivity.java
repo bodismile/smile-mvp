@@ -10,6 +10,7 @@ import butterknife.ButterKnife;
 import cn.smile.R;
 import cn.smile.base.mvp.BaseModel;
 import cn.smile.base.mvp.BasePresenter;
+import cn.smile.base.mvp.BaseView;
 import cn.smile.util.Utils;
 import cn.smile.widget.SwipeBackLayout;
 
@@ -19,17 +20,26 @@ import cn.smile.widget.SwipeBackLayout;
  * @param <E> 和该Activity绑定的M层
  * @author  smile
  */
-public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel> extends ParentActivity {
+public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel> extends ParentActivity implements BaseView{
 
+    /**
+     * P层实现类
+     */
     public T mPresenter;
+    /**
+     * M层实现类
+     */
     public E mModel;
+    /**
+     * 滑动返回的Layout
+     */
     private SwipeBackLayout swipeBackLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //设置contentView
-        setContentView(getLayoutId());
+        setContentView(rootLayoutId());
         //设置视图注解
         if(Utils.hasClass("butterknife.ButterKnife")){
             ButterKnife.bind(this);
@@ -37,9 +47,13 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
         //通过反射获取presenter和Model
         mPresenter = Utils.getT(this, 0);
         mModel = Utils.getT(this, 1);
-        //初始化
+        //初始化View
         this.initView();
-        this.initPresenter();
+        //将V和M绑定到P层
+        if(mPresenter!=null && mModel!=null){
+            mPresenter.bindVM(this,mModel);
+        }
+        this.initData();
     }
 
     @Override
@@ -67,7 +81,7 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     private View getContainer() {
         RelativeLayout container = new RelativeLayout(this);
         swipeBackLayout = new SwipeBackLayout(this);
-        swipeBackLayout.setDragEdge(SwipeBackLayout.DragEdge.LEFT);
+        swipeBackLayout.setDragEdge(initDragEdge());
         ImageView iv_shadow = new ImageView(this);
         iv_shadow.setBackgroundColor(getResources().getColor(R.color.color_shadow));
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
@@ -76,21 +90,31 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
         return container;
     }
 
-    public <T extends View> T getView(int id) {
-        return (T) findViewById(id);
+    /**设置侧滑返回的方向
+     * @return
+     */
+    public SwipeBackLayout.DragEdge initDragEdge(){
+        return SwipeBackLayout.DragEdge.LEFT;
     }
 
     /**
-     * 是否可以滑动返回
+     * 设置是否可以滑动返回-默认为false
      * @return
      */
-    public abstract boolean canSwipeBack();
+    public boolean canSwipeBack(){
+        return false;
+    }
+
+    /**
+     * 初始化数据
+     */
+    public void initData(){}
 
     /**
      * 设置当前布局layout
      * @return
      */
-    public abstract int getLayoutId();
+    public abstract int rootLayoutId();
 
     /**
      * 初始化布局
@@ -98,8 +122,13 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     public abstract void initView();
 
     /**
-     * 初始化Presenter
+     * 获取指定id的view
+     * @param id
+     * @param <T>
+     * @return
      */
-    public abstract void initPresenter();
+    public <T extends View> T getView(int id) {
+        return (T) findViewById(id);
+    }
 
 }
