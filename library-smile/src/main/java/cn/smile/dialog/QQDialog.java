@@ -23,6 +23,11 @@ public abstract class QQDialog extends Dialog implements View.OnClickListener{
 
     Context mainContext;
     TextView tv_title,tv_item1,tv_item2,tv_item3,mCancel;
+    OnCancelListener cancelListener;
+    OnDialogClickListener listener;
+
+    int color;
+    boolean titleVisible=true;//默认有标题
 
     /**
      * 构造函数
@@ -38,8 +43,7 @@ public abstract class QQDialog extends Dialog implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         LayoutInflater inflater = (LayoutInflater) mainContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.dialog_qq, null);
-        final int cFullFillWidth = 10000;
-        layout.setMinimumWidth(cFullFillWidth);
+        layout.setMinimumWidth(10000);
 
         tv_title = (TextView)layout.findViewById(R.id.tv_title);
         tv_item1 = (TextView)layout.findViewById(R.id.tv_item1);
@@ -52,7 +56,7 @@ public abstract class QQDialog extends Dialog implements View.OnClickListener{
         tv_item3.setOnClickListener(this);
         mCancel.setOnClickListener(this);
 
-        if(has){
+        if(titleVisible){
             tv_title.setVisibility(View.VISIBLE);
             tv_title.setText(getTitle());
             tv_item1.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.actionsheet_middle_selector));
@@ -73,7 +77,7 @@ public abstract class QQDialog extends Dialog implements View.OnClickListener{
                 tv_item2.setVisibility(View.VISIBLE);
                 tv_item2.setText(item2);
                 tv_item2.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.actionsheet_bottom_selector));
-                if(!has){
+                if(!titleVisible){
                     tv_item1.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.actionsheet_top_selector));
                 }else{
                     tv_item1.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.actionsheet_middle_selector));
@@ -97,16 +101,12 @@ public abstract class QQDialog extends Dialog implements View.OnClickListener{
         setContentView(layout);
     }
 
-    int color;
-
     public void setTitleColor(int color){
         this.color =color;
     }
 
-    boolean has=true;//默认有标题
-
-    public void hasTitle(boolean has){
-        this.has =has;
+    public void setTitleVisible(boolean has){
+        this.titleVisible =has;
     }
 
     String title,item1,item2,item3;
@@ -119,7 +119,6 @@ public abstract class QQDialog extends Dialog implements View.OnClickListener{
     public void setItem3(String item3){
         this.item3 =item3;
     }
-
     public void setTitle(String title){ this.title=title; }
     public String getTitle(){
         return title;
@@ -138,24 +137,18 @@ public abstract class QQDialog extends Dialog implements View.OnClickListener{
             listener.onClick(this,3);
         }
     }
-
-    public interface OnDialogClickListener {
-        void onClick(DialogInterface dialog, int whichButton);
-    }
-
-    OnCancelListener cancelListener;
-    OnDialogClickListener listener;
-
     public void setOnDialogListener(OnDialogClickListener listener){
         this.listener = listener;
     }
-
     public void setOnCancelListener(OnCancelListener listener){
         this.cancelListener = listener;
     }
-
     public String getString(int id){
         return getContext().getString(id);
+    }
+
+    public interface OnDialogClickListener {
+        void onClick(DialogInterface dialog, int whichButton);
     }
 }
 

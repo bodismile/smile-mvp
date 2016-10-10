@@ -17,6 +17,9 @@ import rx.subscriptions.CompositeSubscription;
  */
 public class RxFactory {
 
+    public RxBus mRxBus = RxBus.getInstance();
+    private Map<String, Observable<?>> mObservables = new HashMap<>();
+    private CompositeSubscription mCompositeSubscription = new CompositeSubscription();
     private static Observable.Transformer schedulersTransformer;
 
     static {
@@ -38,10 +41,6 @@ public class RxFactory {
     public static <T> Observable.Transformer<T, T> applySchedulers() {
         return schedulersTransformer;
     }
-
-    public RxBus mRxBus = RxBus.getInstance();
-    private Map<String, Observable<?>> mObservables = new HashMap<>();
-    private CompositeSubscription mCompositeSubscription = new CompositeSubscription();
 
     /**
      * 发送一个指定Tag的事件

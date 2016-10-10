@@ -93,18 +93,6 @@ public final class DialogHelper {
         dialog.show();
     }
 
-    public static void showDialog(Context context, String title, String content, DialogInterface.OnClickListener listener) {
-        DialogTips tips = new DialogTips(context, title, content);
-        tips.setOnSuccessListener(listener);
-        tips.show();
-    }
-
-    public static void showDialog(Context context, boolean hasTwo, String content, DialogInterface.OnClickListener listener) {
-        DialogTips tips = new DialogTips(context, hasTwo, content);
-        tips.setOnSuccessListener(listener);
-        tips.show();
-    }
-
     /**显示性别选择
      * @param context
      * @param listener

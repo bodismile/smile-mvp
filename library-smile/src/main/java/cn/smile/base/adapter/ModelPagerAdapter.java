@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
  * @author smile
  */
 public class ModelPagerAdapter extends FragmentStatePagerAdapter {
+
     protected PagerModelManager pagerModelManager;
 
     public ModelPagerAdapter(FragmentManager fm, PagerModelManager pagerModelManager) {

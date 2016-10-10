@@ -12,7 +12,7 @@ public class SexDialog extends QQDialog {
 
     public SexDialog(Context context) {
         super(context);
-        super.hasTitle(true);
+        super.setTitleVisible(true);
         super.setTitle(getString(R.string.choose_sex));
         super.setTitleColor(getContext().getResources().getColor(R.color.color_82));
         super.setItem1(getString(R.string.man));

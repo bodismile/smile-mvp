@@ -70,19 +70,19 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
     }
 
     //-----------友盟统计-----start
-//    public void onResume() {
-//        super.onResume();
-//        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
-//            MobclickAgent.onPageStart(getClass().getName()); //统计页面
-//        }
-//    }
-//
-//    public void onPause() {
-//        super.onPause();
-//        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
-//            MobclickAgent.onPageEnd(getClass().getName());
-//        }
-//    }
+    public void onResume() {
+        super.onResume();
+        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
+            MobclickAgent.onPageStart(getClass().getName()); //统计页面
+        }
+    }
+
+    public void onPause() {
+        super.onPause();
+        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
+            MobclickAgent.onPageEnd(getClass().getName());
+        }
+    }
     //-----------友盟统计-----end
 
     @Override
@@ -163,8 +163,6 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
     }
 
     private Toast toast;
-    protected final static String NULL = "";
-
     /**
      * toast
      * @param resId string资源id
@@ -184,7 +182,7 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
                 @Override
                 public void run() {
                     if (toast == null)
-                        toast = Toast.makeText(getActivity(), NULL,Toast.LENGTH_SHORT);
+                        toast = Toast.makeText(getActivity(), "",Toast.LENGTH_SHORT);
                     toast.setText(obj.toString());
                     toast.show();
                 }
@@ -230,7 +228,7 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
         private final WeakReference<BaseFragment> instance;
 
         public WeakReferenceHandler(final BaseFragment fragment) {
-            this.instance = new WeakReference<BaseFragment>(fragment);
+            this.instance = new WeakReference<>(fragment);
         }
 
         @Override

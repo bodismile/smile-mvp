@@ -10,12 +10,8 @@ public class SelectDialog extends QQDialog {
 
     public SelectDialog(Context context, String title, boolean has, String... item1) {
         super(context);
-        if(has){
-            super.setTitle(title);
-            super.hasTitle(true);
-        }else{
-            super.hasTitle(false);
-        }
+        super.setTitleVisible(has);
+        super.setTitle(title);
         if(item1.length>2){
             super.setItem1(item1[0]);
             super.setItem2(item1[1]);

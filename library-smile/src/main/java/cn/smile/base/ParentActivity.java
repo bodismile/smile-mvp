@@ -68,19 +68,19 @@ public class ParentActivity extends AppCompatActivity {
     }
 
     //-----------友盟统计-----start
-//    public void onResume() {
-//        super.onResume();
-//        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
-//            MobclickAgent.onResume(this); // 统计时长
-//        }
-//    }
-//
-//    public void onPause() {
-//        super.onPause();
-//        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
-//            MobclickAgent.onPause(this);
-//        }
-//    }
+    public void onResume() {
+        super.onResume();
+        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
+            MobclickAgent.onResume(this); // 统计时长
+        }
+    }
+
+    public void onPause() {
+        super.onPause();
+        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
+            MobclickAgent.onPause(this);
+        }
+    }
     //-----------友盟统计-----end
 
     @Override
@@ -103,8 +103,6 @@ public class ParentActivity extends AppCompatActivity {
     }
 
     private Toast toast;
-    protected final static String NULL = "";
-
     /**
      * toast
      * @param resId string资源id
@@ -124,7 +122,7 @@ public class ParentActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     if (toast == null)
-                        toast = Toast.makeText(ParentActivity.this, NULL,Toast.LENGTH_SHORT);
+                        toast = Toast.makeText(ParentActivity.this, "",Toast.LENGTH_SHORT);
                     toast.setText(obj.toString());
                     toast.show();
                 }

@@ -1,6 +1,9 @@
 package cn.smile.dialog;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.view.WindowManager;
 
 import cn.smile.R;
@@ -12,98 +15,28 @@ import cn.smile.util.Utils;
  * @date 2015-08-07-10:56
  */
 public class DialogTips extends DialogBase {
-	
-	/**自定义标题和内容
-	 * @param context
-	 * @param title
-	 * @param content
-	 */
-	public DialogTips(Context context, String title, String content){
-		super(context);
-		super.setContent(content);
-		super.setNegativeButtonText(getContext().getString(R.string.cancel));
-		super.setPositiveButtonText(getContext().getString(R.string.yes));
-		super.setPositiveTextColor(context.getResources().getColor(R.color.color_blue));
-		super.setNegativeTextColor(context.getResources().getColor(R.color.color_64));
-		super.setTitle(title);
-	}
 
-	/**无标题，单按钮
-	 * @param context
-	 * @param content
-	 */
-	public DialogTips(Context context, boolean hasTwo, String content){
-		super(context);
-		super.setHasTitle(false);
-		super.setContent(content);
-		if(hasTwo){
-			super.setNegativeButtonText("取消");
-		}
-		super.setPositiveButtonText("确定");
-		super.setPositiveTextColor(context.getResources().getColor(R.color.color_blue));
-	}
+	private Builder mBuilder;
 
-	/**  
-	 * 单按钮
-	 * @param context
-	 * @param positiveText
-	 */
-	public DialogTips(Context context, String positiveText) {
-		super(context);
-		super.setHasTitle(false);
-		super.setContent("");
-		super.setPositiveTextColor(context.getResources().getColor(R.color.color_black));
-		super.setPositiveButtonText(positiveText);
-	}
-	
-	/**自定义标题、内容、单按钮文字
-	 * @param context
-	 * @param title
-	 * @param message
-	 * @param buttonText
-	 */
-	public DialogTips(Context context, String title, String message, String buttonText) {
-		super(context);
-		super.setContent(message);
-		super.setPositiveButtonText(buttonText);
-		super.setTitle(title);
-		super.setPositiveTextColor(context.getResources().getColor(R.color.color_blue));
-		super.setCancel(false);
-	}
-	
-	  
-	/**自定义title、content、单按钮文字，设置对话框点击外部是否可取消
-	 * @param context
-	 * @param isCancel
-	 * @param title
-	 * @param message
-	 * @param buttonText  
-	 */
-	public DialogTips(Context context, boolean isCancel, String title, String message, String buttonText) {
-		super(context);
-		super.setContent(message);
-		super.setPositiveButtonText(buttonText);
-		super.setTitle(title);
-		super.setCancel(isCancel);
-	}
-	  
-	/**自定义title、content、双按钮文字
-	 * @param context
-	 * @param title
-	 * @param message
-	 * @param buttonText
-	 * @param negetiveText
-	 */
-	public DialogTips(Context context, boolean hasTwo,String title, String message, String buttonText, String negetiveText) {
-		super(context);
-		super.setHasTitle(false);
-		super.setTitle(title);
-		super.setContent(message);
-		if(hasTwo){
-			super.setNegativeButtonText(negetiveText);
-		}
-		super.setPositiveButtonText(buttonText);
-		super.setCancel(true);
+	/**
+	 * Builder模式
+	 * @param builder
+     */
+	public DialogTips (Builder builder){
+		super(builder.mContext);
+		super.setCancelable(builder.isCancelable());
+		super.setContent(builder.getContent());
+		super.setBottomVisible(builder.isBottomVisible());
+		super.setTitle(builder.getTitle());
+		super.setContent(builder.getContent());
+		super.setLeftText(builder.getLeftText());
+		super.setRightText(builder.getRightText());
+		super.setBgColor(builder.getBgColor());
+		super.setTitleColor(builder.getTitleColor());
+		super.setLeftBtnColor(builder.getLeftBtnColor());
+		super.setRightBtnColor(builder.getRightBtnColor());
+		super.setMiddleView(builder.getMiddleView());
+		this.mBuilder=builder;
 	}
 
 	/**
@@ -116,12 +49,15 @@ public class DialogTips extends DialogBase {
 	}
 
 	@Override
-	protected void onDismiss() { }
+	protected void onDismiss() {}
 
 	@Override
-	protected void onClickNegativeButton() {
+	protected void onClickLeftBtn() {
 		if(onCancelListener != null){
 			onCancelListener.onClick(this, 0);
+		}
+		if(mBuilder!=null && mBuilder.getOnClickListener()!=null){
+			mBuilder.getOnClickListener().onClick(this,0);
 		}
 	}
 
@@ -129,10 +65,171 @@ public class DialogTips extends DialogBase {
 	 * 确认按钮，触发onSuccessListener的onClick
 	 */
 	@Override
-	protected boolean onClickPositiveButton() {
+	protected boolean onClickRightBtn() {
 		if(onSuccessListener != null){
 			onSuccessListener.onClick(this, 1);
 		}
+		if(mBuilder!=null && mBuilder.getOnClickListener()!=null){
+			mBuilder.getOnClickListener().onClick(this,1);
+		}
 		return true;
 	}
+
+	/**
+	 * Builder模式
+	 */
+	public static class Builder{
+		private Context mContext;
+		private boolean titleVisible;
+		private boolean bottomVisible;
+		private boolean mCancelable;
+		private String title;
+		private String content;
+		private String rightText;
+		private String leftText;
+		private Drawable bgColor;
+		private int rightBtnColor;
+		private int leftBtnColor;
+		private int titleColor;
+		private int width,height;
+		private OnClickListener onClickListener;
+		private View middleView;
+
+		public Builder(Context context) {
+			mContext = context;
+			titleVisible =true;
+			bottomVisible =true;
+			mCancelable =true;
+			title = "提示";
+			content = "";
+			leftText = "";
+			rightText = "";
+			bgColor = ContextCompat.getDrawable(mContext, R.drawable.dialog_bg);
+			rightBtnColor = ContextCompat.getColor(mContext, R.color.color_blue);
+			leftBtnColor = ContextCompat.getColor(mContext, R.color.color_64);
+			titleColor = ContextCompat.getColor(mContext, R.color.color_1e1e1e);
+			height= WindowManager.LayoutParams.WRAP_CONTENT;
+			width = Utils.dip2px(mContext,300);
+			onClickListener=null;
+			middleView =null;
+		}
+
+		public OnClickListener getOnClickListener() {
+			return onClickListener;
+		}
+
+		public Builder setOnClickListener(OnClickListener listener){
+			this.onClickListener = listener;
+			return this;
+		}
+
+		public boolean isTitleVisible() {
+			return titleVisible;
+		}
+
+		public Builder setTitleVisible(boolean titleVisible) {
+			this.titleVisible = titleVisible;
+			return this;
+		}
+
+		public boolean isBottomVisible() {
+			return bottomVisible;
+		}
+
+		public Builder setBottomVisible(boolean bottomVisible) {
+			this.bottomVisible = bottomVisible;
+			return this;
+		}
+
+		public boolean isCancelable() {
+			return mCancelable;
+		}
+
+		public Builder setCancelable(boolean cancel) {
+			mCancelable = cancel;
+			return this;
+		}
+		public String getTitle() {
+			return title;
+		}
+		public Builder setTitle(String title) {
+			this.title = title;
+			return this;
+		}
+		public String getContent() {
+			return content;
+		}
+		public Builder setContent(String content) {
+			this.content = content;
+			return this;
+		}
+		public String getRightText() {
+			return rightText;
+		}
+		public Builder setRightText(String positive) {
+			this.rightText = positive;
+			return this;
+		}
+		public String getLeftText() {
+			return leftText;
+		}
+		public Builder setLeftText(String negative) {
+			this.leftText = negative;
+			return this;
+		}
+		public Drawable getBgColor() {
+			return bgColor;
+		}
+		public Builder setBgColor(Drawable bgColor) {
+			this.bgColor = bgColor;
+			return this;
+		}
+		public int getRightBtnColor() {
+			return rightBtnColor;
+		}
+		public Builder setRightBtnColor(int positiveColor) {
+			this.rightBtnColor = positiveColor;
+			return this;
+		}
+		public int getLeftBtnColor() {
+			return leftBtnColor;
+		}
+		public Builder setLeftBtnColor(int negativeColor) {
+			this.leftBtnColor = negativeColor;
+			return this;
+		}
+		public int getTitleColor() {
+			return titleColor;
+		}
+		public Builder setTitleColor(int titleColor) {
+			this.titleColor = titleColor;
+			return this;
+		}
+		public int getWidth() {
+			return width;
+		}
+		public Builder setWidth(int width) {
+			this.width = width;
+			return this;
+		}
+		public int getHeight() {
+			return height;
+		}
+		public Builder setHeight(int height) {
+			this.height = height;
+			return this;
+		}
+		public View getMiddleView() {
+			return middleView;
+		}
+		public Builder setMiddleView(View middleView) {
+			this.middleView = middleView;
+			return this;
+		}
+		public DialogTips build() {
+			return new DialogTips(this);
+		}
+
+	}
+
 }

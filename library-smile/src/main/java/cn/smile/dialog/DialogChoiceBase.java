@@ -25,7 +25,6 @@ public abstract class DialogChoiceBase extends Dialog implements OnClickListener
 	protected Context mContext;
 	TextView tv_wheel_cancel,tv_wheel_title,tv_wheel_confirm;
 	ListView mListView;
-
 	protected List<String> mList;
 	private String title;
 	protected OnClickListener mOkClickListener;

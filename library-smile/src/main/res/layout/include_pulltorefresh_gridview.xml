@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.smile.widget.MultiStateView   xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ptr="http://schemas.android.com/tools"
+    android:id="@+id/multiStateView"
+    android:background="@color/color_fafafa"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:msv_emptyView="@layout/common_empty"
+    app:msv_errorView="@layout/common_error"
+    app:msv_loadingView="@layout/common_loading">
+
+    <com.handmark.pulltorefresh.library.PullToRefreshGridView
+        android:scrollbarStyle="outsideOverlay"
+        android:id="@+id/refreshView"
+        android:fadingEdge="none"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/dimen_10"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:listSelector="#00000000"
+        android:horizontalSpacing="@dimen/dimen_5"
+        android:verticalSpacing="@dimen/dimen_5"
+        android:stretchMode="columnWidth"
+        android:numColumns="auto_fit"
+        android:fastScrollEnabled="false"
+        android:scrollbars="none"
+        android:headerDividersEnabled="false"
+        android:footerDividersEnabled="false"
+        android:smoothScrollbar="true"
+        ptr:ptrHeaderBackground="@color/color_fafafa"
+        ptr:ptrHeaderTextColor="#ff8c8c8c"
+        ptr:ptrListViewExtrasEnabled="true" />
+
+</cn.smile.widget.MultiStateView>

@@ -7,35 +7,18 @@
     android:background="@drawable/dialog_bg"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/dialog_top"
+    <TextView
+        android:id="@+id/dialog_title"
         android:layout_width="match_parent"
-        android:paddingTop="@dimen/dimen_10"
-        android:layout_height="@dimen/dimen_50">
-
-        <ImageView
-            android:layout_alignParentLeft="true"
-            android:id="@+id/dialog_titleicon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            />
-
-        <TextView
-            android:id="@+id/dialog_title"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/style_text_1e1e1e"
-            tools:text="提醒"
-            android:textSize="@dimen/font_17"
-            android:gravity="center"
-            android:ellipsize="end"
-            />
-    </RelativeLayout>
+        android:layout_height="@dimen/dimen_50"
+        style="@style/style_text_1e1e1e"
+        tools:text="提醒"
+        android:textSize="@dimen/font_17"
+        android:gravity="center"
+        android:ellipsize="end"/>
 
     <LinearLayout
-        android:id="@+id/dialog_contentPanel"
+        android:id="@+id/dialog_middle_msg"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -47,17 +30,18 @@
         android:paddingTop="@dimen/dimen_16" >
 
         <TextView
-            android:id="@+id/dialog_message"
+            android:id="@+id/dialog_msg"
             style="@style/style_text_gray82"
             android:layout_width="match_parent"
             tools:text="hahahha"
             android:gravity="left|center"
             android:lineSpacingExtra="@dimen/dimen_8"
             android:layout_height="wrap_content" />
+
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/dialog_customPanel"
+        android:id="@+id/dialog_middle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1" >
@@ -70,7 +54,7 @@
     </FrameLayout>
 
     <View
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/color_dialog_line" />
 
@@ -80,16 +64,8 @@
         android:layout_height="@dimen/dimen_50"
         android:orientation="horizontal" >
 
-        <LinearLayout
-            android:id="@+id/dialog_leftspacer"
-            android:layout_width="0px"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.25"
-            android:orientation="horizontal"
-            android:visibility="gone" />
-
         <Button
-            android:id="@+id/dialog_negativebutton"
+            android:id="@+id/dialog_left"
             style="@style/style_text_64"
             android:layout_width="0px"
             android:layout_height="@dimen/dimen_50"
@@ -107,7 +83,7 @@
             android:background="@color/color_dialog_line" />
 
         <Button
-            android:id="@+id/dialog_positivebutton"
+            android:id="@+id/dialog_right"
             style="@style/style_text_blue"
             android:layout_width="0px"
             android:layout_height="@dimen/dimen_50"
@@ -119,14 +95,6 @@
             android:paddingLeft="10dip"
             android:paddingRight="10dip"
             android:singleLine="true" />
-
-        <LinearLayout
-            android:id="@+id/dialog_rightspacer"
-            android:layout_width="0px"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.25"
-            android:orientation="horizontal"
-            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

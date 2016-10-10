@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cn.smile.R;
@@ -41,26 +40,155 @@ public abstract class DialogBase extends Dialog {
 	 */
 	protected OnDismissListener onDismissListener;
 	/**
-	 * 中间的view
+	 * RootView
 	 */
-	protected View view;
-	protected Button positiveButton, negativeButton;
-	private boolean isFullScreen = false;
+	LinearLayout ll_dialog;
+	/**
+	 * 标题
+	 */
+	TextView tv_title;
+	/**
+	 * 内容
+	 */
+	TextView tv_content;
+	/**
+	 *中间View
+	 */
+	LinearLayout dialog_middle_msg;
+	FrameLayout dialog_middle;
+	FrameLayout dialog_custom;
+	/**
+	 * 自定义的内容view
+	 */
+	protected View middleView;
+	/**
+	 * 按钮文本
+	 */
+	protected Button rightBtn, leftBtn;
+	/**
+	 * 底部View
+	 */
 	private LinearLayout dialog_bottom;
-
-	private boolean hasTitle = true;//是否有title
-	private boolean hasBottom = true;//是否有bottom
-	private boolean isCancel = true;//默认是否可点击back按键/点击外部区域取消对话框
+	/**
+	 * 是否全屏显示
+	 */
+	private boolean isFullScreen = false;
+	/**
+	 * 是否有title
+	 */
+	private boolean titleVisible = true;
+	/**
+	 * 是否有Bottom
+	 */
+	private boolean bottomVisible = true;
+	/**
+	 * 是否可点击back按键/点击外部区域取消对话框，默认：可取消
+	 */
+	private boolean mCancelable = true;
 
 	private int width = 0, height = 0;
 	private String content, title;
-	private String namePositiveButton, nameNegativeButton;
+	private String rightText, leftText;
 	private Drawable bgColor;
-
-	private int titleColor =0,positiveColor=0,negativeColor=0;
-
+	private int titleColor =0, rightBtnColor =0, leftBtnColor =0;
 	private final int MATCH_PARENT = android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
+	/**
+	 * 初始化View
+	 */
+	private void initView(){
+		//rootView
+		ll_dialog = (LinearLayout)findViewById(R.id.ll_dialog);
+		//标题
+		tv_title =(TextView)findViewById(R.id.dialog_title);
+		//文本View
+		dialog_middle_msg = (LinearLayout)findViewById(R.id.dialog_middle_msg);
+		//内容文本
+		tv_content = (TextView)findViewById(R.id.dialog_msg);
+		//自定义View
+		dialog_middle = (FrameLayout)findViewById(R.id.dialog_middle);
+		//自定义内容View
+		dialog_custom = (FrameLayout)findViewById(R.id.dialog_custom);
+		//底部布局
+		dialog_bottom = (LinearLayout)findViewById(R.id.dialog_bottom);
+		//底部按钮
+		rightBtn = (Button)findViewById(R.id.dialog_right);
+		leftBtn = (Button)findViewById(R.id.dialog_left);
+	}
+
+	private void initData(){
+		//设置背景色
+		Drawable bg;
+		if(bgColor!=null){
+			bg = bgColor;
+		}else{
+			bg = getContext().getResources().getDrawable(R.drawable.dialog_bg);
+		}
+		if(Build.VERSION.SDK_INT< Build.VERSION_CODES.JELLY_BEAN){
+			ll_dialog.setBackgroundDrawable(bg);
+		}else{
+			ll_dialog.setBackground(bg);
+		}
+		//是否有title
+		if(titleVisible){
+			tv_title.setVisibility(View.VISIBLE);
+		}else{
+			tv_title.setVisibility(View.GONE);
+		}
+		// 设置标题
+		tv_title.setText(title);
+		if(titleColor>0){
+			tv_title.setTextColor(titleColor);
+		}
+		//content为文字时
+		if(!TextUtils.isEmpty(content)){
+			if(!titleVisible){
+				tv_content.setGravity(Gravity.CENTER);
+			}else{
+				tv_content.setGravity(Gravity.LEFT| Gravity.CENTER);
+			}
+			tv_content.setText(content);
+			dialog_middle_msg.setVisibility(View.VISIBLE);
+			dialog_middle.setVisibility(View.GONE);
+		} else{
+			dialog_middle_msg.setVisibility(View.GONE);
+			dialog_middle.setVisibility(View.VISIBLE);
+		}
+		//自定义内容View
+		if (middleView != null) {
+			dialog_custom.addView(middleView, new LayoutParams(MATCH_PARENT, MATCH_PARENT));
+			dialog_middle_msg.setVisibility(View.GONE);
+			dialog_middle.setVisibility(View.VISIBLE);
+		} else {
+			dialog_middle_msg.setVisibility(View.VISIBLE);
+			dialog_middle.setVisibility(View.GONE);
+		}
+		//底部布局
+		if(bottomVisible){
+			dialog_bottom.setVisibility(View.VISIBLE);
+		}else{
+			dialog_bottom.setVisibility(View.GONE);
+		}
+		if(!TextUtils.isEmpty(rightText)){
+			rightBtn.setText(rightText);
+			if(rightBtnColor>0){
+				rightBtn.setTextColor(rightBtnColor);
+			}
+			rightBtn.setOnClickListener(getPositiveButtonOnClickListener());
+		} else {
+			rightBtn.setVisibility(View.GONE);
+		}
+		if(!TextUtils.isEmpty(leftText)){
+			leftBtn.setText(leftText);
+			if(leftBtnColor>0){
+				leftBtn.setTextColor(leftBtnColor);
+			}
+			leftBtn.setOnClickListener(getNegativeButtonOnClickListener());
+		} else {
+			leftBtn.setVisibility(View.GONE);
+		}
+
+	}
 	/**
 	 * 构造函数
 	 * @param context 对象应该是Activity
@@ -83,98 +211,9 @@ public abstract class DialogBase extends Dialog {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
     	setContentView(R.layout.dialog_base);
-		this.onBuilding();
-		//设置背景
-		LinearLayout ll_dialog = (LinearLayout)findViewById(R.id.ll_dialog);
-		Drawable bg;
-		if(bgColor!=null){
-			bg = bgColor;
-		}else{
-			bg = getContext().getResources().getDrawable(R.drawable.dialog_bg);
-		}
-		if(Build.VERSION.SDK_INT< Build.VERSION_CODES.JELLY_BEAN){
-			ll_dialog.setBackgroundDrawable(bg);
-		}else{
-			ll_dialog.setBackground(bg);
-		}
-		// 设置标题和消息
-		RelativeLayout dialog_top = (RelativeLayout)findViewById(R.id.dialog_top);
-		//是否有title
-		if(hasTitle){
-			dialog_top.setVisibility(View.VISIBLE);
-		}else{
-			dialog_top.setVisibility(View.GONE);
-		}
-		//标题
-		TextView titleTextView = (TextView)findViewById(R.id.dialog_title);
-		titleTextView.setText(this.getTitle());
-		if(getTitleColor()>0){
-			titleTextView.setTextColor(this.getTitleColor());
-		}else{
-			titleTextView.setTextColor(getContext().getResources().getColor(R.color.color_1e1e1e));
-		}
-		//内容
-		TextView content = (TextView)findViewById(R.id.dialog_message);
-		if(!TextUtils.isEmpty(getContent())){
-			if(!hasTitle){
-				content.setGravity(Gravity.CENTER);
-			}else{
-				content.setGravity(Gravity.LEFT| Gravity.CENTER);
-			}
-			content.setText(this.getContent());
-			findViewById(R.id.dialog_contentPanel).setVisibility(View.VISIBLE);
-			findViewById(R.id.dialog_customPanel).setVisibility(View.GONE);
-		} else{
-			findViewById(R.id.dialog_contentPanel).setVisibility(View.GONE);
-			findViewById(R.id.dialog_customPanel).setVisibility(View.VISIBLE);
-		}
-		//是否包含自定义的内容view
-		if (view != null) {
-			FrameLayout custom = (FrameLayout) findViewById(R.id.dialog_custom);
-			custom.addView(view, new LayoutParams(MATCH_PARENT, MATCH_PARENT));
-			findViewById(R.id.dialog_contentPanel).setVisibility(View.GONE);
-			findViewById(R.id.dialog_customPanel).setVisibility(View.VISIBLE);
-		} else {
-			findViewById(R.id.dialog_contentPanel).setVisibility(View.VISIBLE);
-			findViewById(R.id.dialog_customPanel).setVisibility(View.GONE);
-		}
-		//底部布局
-		dialog_bottom = (LinearLayout)findViewById(R.id.dialog_bottom);
-		if(hasBottom){
-			dialog_bottom.setVisibility(View.VISIBLE);
-		}else{
-			dialog_bottom.setVisibility(View.GONE);
-		}
-		//底部按钮
-		positiveButton = (Button)findViewById(R.id.dialog_positivebutton);
-		negativeButton = (Button)findViewById(R.id.dialog_negativebutton);
-
-		if(!TextUtils.isEmpty(namePositiveButton)){
-			positiveButton.setText(namePositiveButton);
-			if(getPositiveTextColor()>0){
-				positiveButton.setTextColor(getPositiveTextColor());
-			}else{
-				positiveButton.setTextColor(getContext().getResources().getColor(R.color.color_blue));
-			}
-			positiveButton.setOnClickListener(getPositiveButtonOnClickListener());
-		} else {
-			positiveButton.setVisibility(View.GONE);
-			findViewById(R.id.dialog_leftspacer).setVisibility(View.VISIBLE);
-			findViewById(R.id.dialog_rightspacer).setVisibility(View.VISIBLE);
-		}
-
-		if(!TextUtils.isEmpty(nameNegativeButton)){
-			negativeButton.setText(nameNegativeButton);
-			if(this.getNegativeTextColor()>0){
-				negativeButton.setTextColor(this.getNegativeTextColor());
-			}else{
-				negativeButton.setTextColor(getContext().getResources().getColor(R.color.color_64));
-			}
-			negativeButton.setOnClickListener(getNegativeButtonOnClickListener());
-		} else {
-			negativeButton.setVisibility(View.GONE);
-		}
-		
+		onBuilding();
+		initView();
+		initData();
 		// 设置对话框的位置和大小
 		LayoutParams params = this.getWindow().getAttributes();
 		if(this.getWidth()>0)
@@ -189,13 +228,12 @@ public abstract class DialogBase extends Dialog {
 		}
 		params.gravity = Gravity.CENTER;
 		getWindow().setAttributes(params);
-		//设置点击dialog外部区域可取消
-		setCanceledOnTouchOutside(isCancel);
-		setCancelable(isCancel);
+		setCanceledOnTouchOutside(mCancelable);
+		setCancelable(mCancelable);
 		this.setOnDismissListener(getOnDismissListener());
 		this.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 	}
-	
+
 	/**
 	 * 获取OnDismiss事件监听，释放资源
 	 * @return OnDismiss事件监听
@@ -205,10 +243,10 @@ public abstract class DialogBase extends Dialog {
 			public void onDismiss(DialogInterface arg0) {
 				DialogBase.this.onDismiss();
 				DialogBase.this.setOnDismissListener(null);
-				view = null;
+				middleView = null;
 				mContext = null;
-				positiveButton = null;
-				negativeButton = null;
+				rightBtn = null;
+				leftBtn = null;
 				if(onDismissListener != null){
 					onDismissListener.onDismiss(null);
 				}
@@ -223,7 +261,7 @@ public abstract class DialogBase extends Dialog {
 	protected View.OnClickListener getPositiveButtonOnClickListener() {
 		return new View.OnClickListener() {
 			public void onClick(View v) {
-				if(onClickPositiveButton())
+				if(onClickRightBtn())
 					DialogBase.this.dismiss();
 			}
 		};
@@ -236,7 +274,7 @@ public abstract class DialogBase extends Dialog {
 	protected View.OnClickListener getNegativeButtonOnClickListener() {
 		return new View.OnClickListener() {
 			public void onClick(View v) {
-				onClickNegativeButton();
+				onClickLeftBtn();
 				DialogBase.this.dismiss();
 			}
 		};
@@ -287,24 +325,24 @@ public abstract class DialogBase extends Dialog {
 	/**
 	 * 确认按钮单击方法，用于子类定制
 	 */
-	protected abstract boolean onClickPositiveButton();
+	protected abstract boolean onClickRightBtn();
 
 	/**
 	 * 取消按钮单击方法，用于子类定制
 	 */
-	protected abstract void onClickNegativeButton();
+	protected abstract void onClickLeftBtn();
 
 	/**
 	 * 关闭方法，用于子类定制
 	 */
 	protected abstract void onDismiss();
 
-	public boolean isCancel() {
-		return isCancel;
-	}
-
-	public void setCancel(boolean isCancel) {
-		this.isCancel = isCancel;
+	/**
+	 * 点击其他区域是否可Dismiss
+	 * @param isCancel
+     */
+	public void setCancelable(boolean isCancel) {
+		this.mCancelable = isCancel;
 	}
 
 	/**
@@ -322,20 +360,6 @@ public abstract class DialogBase extends Dialog {
 	}
 	
 	/**
-	 * @return 对话框标题颜色
-	 */
-	public int getTitleColor() {
-		return titleColor;
-	}
-	
-	/**
-	 * @param color 对话框标题颜色
-	 */
-	public void setTitleColor(int color) {
-		this.titleColor = color;
-	}
-	
-	/**
 	 * @return 对话框提示信息
 	 */
 	protected String getContent() {
@@ -349,29 +373,63 @@ public abstract class DialogBase extends Dialog {
 		this.content = message;
 	}
 
-	protected void setNegativeTextColor(int color){
-		this.negativeColor = color;
+	/**
+	 * @return 对话框标题颜色
+	 */
+	public int getTitleColor() {
+		return titleColor;
 	}
 
-	public int getNegativeTextColor() {
-		return negativeColor;
+	/**
+	 * @param color 对话框标题颜色
+	 */
+	public void setTitleColor(int color) {
+		this.titleColor = color;
 	}
 
-	public int getPositiveTextColor() {
-		return positiveColor;
+	/**
+	 * 获取左边按钮颜色
+	 * @return
+     */
+	public int getLeftBtnColor() {
+		return leftBtnColor;
 	}
 
-	public void setPositiveTextColor(int positiveColor) {
-		this.positiveColor = positiveColor;
+	/**
+	 * 设置左边按钮颜色
+	 * @param color
+     */
+	protected void setLeftBtnColor(int color){
+		this.leftBtnColor = color;
 	}
 
-	/**背景色
+	/**
+	 * 获取右边按钮颜色
+	 * @return
+     */
+	public int getRightBtnColor() {
+		return rightBtnColor;
+	}
+
+	/**
+	 *设置右边按钮颜色
+	 * @param positiveColor
+     */
+	public void setRightBtnColor(int positiveColor) {
+		this.rightBtnColor = positiveColor;
+	}
+	/**
+	 * 背景色
 	 * @return
 	 */
 	public Drawable getBgColor() {
 		return bgColor;
 	}
 
+	/**
+	 * 设置背景色
+	 * @param bgColor
+     */
 	public void setBgColor(Drawable bgColor) {
 		this.bgColor = bgColor;
 	}
@@ -379,45 +437,45 @@ public abstract class DialogBase extends Dialog {
 	/**
 	 * @return 对话框View
 	 */
-	protected View getView() {
-		return view;
+	protected View getMiddleView() {
+		return middleView;
 	}
 
 	/**
 	 * @param view 对话框View
 	 */
-	protected void setView(View view) {
-		this.view = view;
+	protected void setMiddleView(View view) {
+		this.middleView = view;
 	}
 
 	/**
 	 * @return 是否全屏
 	 */
-	public boolean getIsFullScreen() {
+	public boolean isFullScreen() {
 		return isFullScreen;
 	}
 
 	/**
 	 * @param isFullScreen 是否全屏
 	 */
-	public void setIsFullScreen(boolean isFullScreen) {
+	public void setFullScreen(boolean isFullScreen) {
 		this.isFullScreen = isFullScreen;
 	}
 
-	public boolean isHasTitle() {
-		return hasTitle;
+	/**
+	 * 设置标题是否隐藏
+	 * @param titleVisible
+     */
+	public void setTitleVisible(boolean titleVisible) {
+		this.titleVisible = titleVisible;
 	}
 
-	public void setHasTitle(boolean hasTitle) {
-		this.hasTitle = hasTitle;
-	}
-	
-	public boolean isHasBottom() {
-		return hasBottom;
-	}
-	
-	public void setHasBottom(boolean hasBottom) {
-		this.hasBottom = hasBottom;
+	/**
+	 * 设置底部是否隐藏
+	 * @param bottomVisible
+     */
+	public void setBottomVisible(boolean bottomVisible) {
+		this.bottomVisible = bottomVisible;
 	}
 
 	/**
@@ -449,31 +507,31 @@ public abstract class DialogBase extends Dialog {
 	}
 
 	/**
-	 * @return 确认按钮名称
+	 * @return 右边按钮名称
 	 */
-	protected String getPositiveButtonText() {
-		return namePositiveButton;
+	protected String getRightText() {
+		return rightText;
 	}
 
 	/**
-	 * @param namePositiveButton 确认按钮名称
+	 * @param text 右边按钮名称
 	 */
-	protected void setPositiveButtonText(String namePositiveButton) {
-		this.namePositiveButton = namePositiveButton;
+	protected void setRightText(String text) {
+		this.rightText = text;
 	}
 
 	/**
-	 * @return 取消按钮名称
+	 * @return 左边按钮名称
 	 */
-	protected String getNegativeButtonText() {
-		return nameNegativeButton;
+	protected String getLeftText() {
+		return leftText;
 	}
 
 	/**
-	 * @param nameNegativeButton 取消按钮名称
+	 * @param text 左边按钮名称
 	 */
-	protected void setNegativeButtonText(String nameNegativeButton) {
-		this.nameNegativeButton = nameNegativeButton;
+	protected void setLeftText(String text) {
+		this.leftText = text;
 	}
 
 }

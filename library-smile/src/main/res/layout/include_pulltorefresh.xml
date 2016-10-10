@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.smile.widget.MultiStateView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ptr="http://schemas.android.com/tools"
+    android:id="@id/multiStateView"
+    android:background="#fafafa"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:msv_emptyView="@layout/common_empty"
+    app:msv_errorView="@layout/common_error"
+    app:msv_loadingView="@layout/common_loading">
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@id/refreshView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/dimen_10"
+        android:cacheColorHint="@color/color_transparent"
+        android:divider="@null"
+        android:fadingEdge="none"
+        android:fadingEdgeLength="0dp"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:smoothScrollbar="true"
+        ptr:ptrHeaderBackground="#fafafa"
+        ptr:ptrHeaderTextColor="#ff8c8c8c"
+        ptr:ptrListViewExtrasEnabled="true"
+        android:listSelector="@color/color_transparent"
+        android:scrollbars="none"/>
+
+</cn.smile.widget.MultiStateView>
