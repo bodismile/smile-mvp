@@ -88,8 +88,8 @@ public final class DialogHelper {
      * Builder
      * @param builder
      */
-    public static void showDialog(DialogTips.Builder builder){
-        DialogTips dialog =new DialogTips(builder);
+    public static void showDialog(SmileDialog.Builder builder){
+        SmileDialog dialog =new SmileDialog(builder);
         dialog.show();
     }
 

@@ -15,7 +15,7 @@ import cn.smile.R;
  * @author smile
  * @date   2015-7-24 上午11:15:00  
  */
-public class CustomTableView extends LinearLayout {
+public class BottomBar extends LinearLayout {
 
 	private Context mContext;
 	private LayoutInflater inflater;
@@ -39,7 +39,7 @@ public class CustomTableView extends LinearLayout {
 		mOnTableClickListener = myOnTableClickListener;
 	}
 
-	public CustomTableView(Context context, AttributeSet attrs) {
+	public BottomBar(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mContext = context;
 		inflater = LayoutInflater.from(mContext);

@@ -78,6 +78,15 @@ public final class TimeUtil {
 	}
 
 	/**
+	 * @param time
+	 * @return
+	 */
+	private static String getHourAndMin(long time) {
+		SimpleDateFormat format = new SimpleDateFormat(FORMAT_TIME);
+		return format.format(new Date(time));
+	}
+
+	/**
 	 * @param hasYear
 	 * @param time
 	 * @return
@@ -199,15 +208,6 @@ public final class TimeUtil {
 		}
 	}
 
-	/**
-	 * @param time
-	 * @return
-     */
-	public static String getHourAndMin(long time) {
-		SimpleDateFormat format = new SimpleDateFormat(FORMAT_TIME);
-		return format.format(new Date(time));
-	}
-
 	/**比较时间
 	 * @param startYear 开始年
 	 * @param startMonth 开始月
@@ -231,26 +231,6 @@ public final class TimeUtil {
 			}
 		}else{
 			return -1;
-		}
-	}
-
-	/**将BmobDate转换为指定格式的时间
-	 * @param bmobDate string格式的日期字符串
-	 * @param formatType 转换格式
-	 * @return
-	 */
-	public static String getBmobDate(String bmobDate,String formatType){
-		SimpleDateFormat formatter = new SimpleDateFormat(TimeUtil.FORMAT_DATE_TIME_SECOND);
-		Date date = null;
-		try {
-			date = formatter.parse(bmobDate);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		if(date!=null) {
-			return new SimpleDateFormat(formatType).format(date);
-		}else {
-			return null;
 		}
 	}
 

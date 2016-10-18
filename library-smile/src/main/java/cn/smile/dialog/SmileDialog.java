@@ -14,7 +14,7 @@ import cn.smile.util.Utils;
  * @author smile
  * @date 2015-08-07-10:56
  */
-public class DialogTips extends DialogBase {
+public class SmileDialog extends DialogBase {
 
 	private Builder mBuilder;
 
@@ -22,7 +22,7 @@ public class DialogTips extends DialogBase {
 	 * Builder模式
 	 * @param builder
      */
-	public DialogTips (Builder builder){
+	public SmileDialog(Builder builder){
 		super(builder.mContext);
 		super.setCancelable(builder.isCancelable());
 		super.setContent(builder.getContent());
@@ -226,8 +226,8 @@ public class DialogTips extends DialogBase {
 			this.middleView = middleView;
 			return this;
 		}
-		public DialogTips build() {
-			return new DialogTips(this);
+		public SmileDialog build() {
+			return new SmileDialog(this);
 		}
 
 	}

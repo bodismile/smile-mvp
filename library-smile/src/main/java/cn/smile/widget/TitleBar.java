@@ -21,7 +21,6 @@ import cn.smile.listener.OnToolBarListener;
 public class TitleBar extends RelativeLayout {
 
     private int titleBg;
-
     private String titleText;
     private int titleColor;
     private int titleSize;

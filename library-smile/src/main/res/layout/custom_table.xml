@@ -21,7 +21,7 @@
             android:id="@+id/iv_tab1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@mipmap/btn_tab1_nor"/>
+            />
 
         <TextView
             android:id="@+id/tv_tab1"
@@ -47,7 +47,7 @@
             android:scaleType="centerInside"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dimen_60"
-            android:src="@drawable/selector_main_tab2" />
+            />
 
         <TextView
             android:id="@+id/tv_tab2"
@@ -73,7 +73,7 @@
             android:scaleType="centerInside"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@mipmap/btn_tab3_nor" />
+            />
 
         <TextView
             android:id="@+id/tv_tab3"

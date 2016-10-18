@@ -9,7 +9,7 @@ import android.widget.TextView;
  * EditText的最大长度限制，英文0.5个字符，中文1个字符
  * @author  smile
  */
-public class MaxLengthTextWatcher implements TextWatcher {
+public class MaxTextWatcher implements TextWatcher {
   
     private int maxLen = 0;  
     private EditText mEditText = null;
@@ -17,7 +17,7 @@ public class MaxLengthTextWatcher implements TextWatcher {
     private int editStart;
     private int editEnd;
 
-    public MaxLengthTextWatcher(int maxLen, EditText editText, TextView tv) {
+    public MaxTextWatcher(int maxLen, EditText editText, TextView tv) {
         this.maxLen = maxLen;  
         this.mEditText = editText;
         this.tvNum = tv;
@@ -26,17 +26,13 @@ public class MaxLengthTextWatcher implements TextWatcher {
     public void afterTextChanged(Editable s) {
         editStart = mEditText.getSelectionStart();
         editEnd = mEditText.getSelectionEnd();
-        // 先去掉监听器，否则会出现栈溢出
         mEditText.removeTextChangedListener(this);
-        // 注意这里只能每次都对整个EditText的内容求长度，不能对删除的单个字符求长度
-        // 因为是中英文混合，单个字符而言，calculateLength函数都会返回1
-        while (calculateLength(s.toString()) > maxLen) { // 当输入字符个数超过限制的大小时，进行截断操作
+        while (calculateLength(s.toString()) > maxLen) {
             s.delete(editStart - 1, editEnd);
             editStart--;
             editEnd--;
         }
         mEditText.setSelection(editStart);
-        // 恢复监听器
         mEditText.addTextChangedListener(this);
         if(tvNum!=null){
             tvNum.setText((getInputCount())+"/"+maxLen);

@@ -94,6 +94,51 @@ public abstract class DialogBase extends Dialog {
 	private final int MATCH_PARENT = android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 	/**
+	 * 构造函数
+	 * @param context 对象应该是Activity
+	 */
+	public DialogBase(Context context) {
+		super(context, R.style.Dialog_Theme);
+		this.mContext = context;
+	}
+
+	/**自定义dialog主题
+	 * @param context
+	 * @param theme  
+	 */
+	public DialogBase(Context context, int theme) {
+		super(context,theme);
+		this.mContext = context;
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+    	setContentView(R.layout.dialog_base);
+		onBuilding();
+		initView();
+		initData();
+		// 设置对话框的位置和大小
+		LayoutParams params = this.getWindow().getAttributes();
+		if(this.getWidth()>0)
+			params.width = this.getWidth();
+		if(this.getHeight()>0){
+			params.height = this.getHeight();
+		}
+		// 如果设置为全屏
+		if(isFullScreen) {
+			params.width = LayoutParams.MATCH_PARENT;
+			params.height = LayoutParams.MATCH_PARENT;
+		}
+		params.gravity = Gravity.CENTER;
+		getWindow().setAttributes(params);
+		setCanceledOnTouchOutside(mCancelable);
+		setCancelable(mCancelable);
+		this.setOnDismissListener(getOnDismissListener());
+		this.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+	}
+
+	/**
 	 * 初始化View
 	 */
 	private void initView(){
@@ -188,50 +233,6 @@ public abstract class DialogBase extends Dialog {
 			leftBtn.setVisibility(View.GONE);
 		}
 
-	}
-	/**
-	 * 构造函数
-	 * @param context 对象应该是Activity
-	 */
-	public DialogBase(Context context) {
-		super(context, R.style.Dialog_Theme);
-		this.mContext = context;
-	}
-
-	/**自定义dialog主题
-	 * @param context
-	 * @param theme  
-	 */
-	public DialogBase(Context context, int theme) {
-		super(context,theme);
-		this.mContext = context;
-	}
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-    	setContentView(R.layout.dialog_base);
-		onBuilding();
-		initView();
-		initData();
-		// 设置对话框的位置和大小
-		LayoutParams params = this.getWindow().getAttributes();
-		if(this.getWidth()>0)
-			params.width = this.getWidth();
-		if(this.getHeight()>0){
-			params.height = this.getHeight();
-		}
-		// 如果设置为全屏
-		if(isFullScreen) {
-			params.width = LayoutParams.MATCH_PARENT;
-			params.height = LayoutParams.MATCH_PARENT;
-		}
-		params.gravity = Gravity.CENTER;
-		getWindow().setAttributes(params);
-		setCanceledOnTouchOutside(mCancelable);
-		setCancelable(mCancelable);
-		this.setOnDismissListener(getOnDismissListener());
-		this.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 	}
 
 	/**
