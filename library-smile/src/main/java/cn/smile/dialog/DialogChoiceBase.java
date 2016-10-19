@@ -44,14 +44,11 @@ public abstract class DialogChoiceBase extends Dialog implements OnClickListener
 		tv_wheel_title = (TextView)findViewById(R.id.tv_wheel_title);
 		tv_wheel_confirm = (TextView)findViewById(R.id.tv_wheel_confirm);
 		mListView = (ListView)findViewById(R.id.listView);
-
 		tv_wheel_cancel.setOnClickListener(this);
 		tv_wheel_confirm.setOnClickListener(this);
-
 		if(!TextUtils.isEmpty(title)){
 			tv_wheel_title.setText(title);
 		}
-
 		Window w = getWindow();
 		WindowManager.LayoutParams lp = w.getAttributes();
 		lp.x = 0;
@@ -59,7 +56,6 @@ public abstract class DialogChoiceBase extends Dialog implements OnClickListener
 		lp.y = cMakeBottom;
 		lp.gravity = Gravity.BOTTOM;
 		onWindowAttributesChanged(lp);
-
 		setCanceledOnTouchOutside(true);
 		setCancelable(true);
 		getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, Utils.dip2px(getContext(),250));

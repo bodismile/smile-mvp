@@ -36,6 +36,8 @@ public class SmileDialog extends DialogBase {
 		super.setLeftBtnColor(builder.getLeftBtnColor());
 		super.setRightBtnColor(builder.getRightBtnColor());
 		super.setMiddleView(builder.getMiddleView());
+		super.setTitleVisible(builder.isTitleVisible());
+		super.setBottomVisible(builder.isBottomVisible());
 		this.mBuilder=builder;
 	}
 
@@ -44,8 +46,13 @@ public class SmileDialog extends DialogBase {
 	 */
 	@Override
 	protected void onBuilding() {
-		super.setWidth(Utils.dip2px(mContext, 300));
-		super.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+		if(mBuilder!=null && mBuilder.getHeight()!=0 && mBuilder.getWidth()!=0){
+			super.setWidth(mBuilder.getWidth());
+			super.setHeight(mBuilder.getHeight());
+		}else{
+			super.setWidth(Utils.dip2px(mContext, 300));
+			super.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+		}
 	}
 
 	@Override

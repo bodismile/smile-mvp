@@ -14,8 +14,6 @@ import com.umeng.analytics.MobclickAgent;
 import java.lang.ref.WeakReference;
 
 import cn.smile.util.SLog;
-import cn.smile.util.Utils;
-import icepick.Icepick;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -38,48 +36,33 @@ public class ParentActivity extends AppCompatActivity {
      * @param s
      */
     protected void addSubscription(Subscription s) {
-        if(!Utils.hasClass("rx.subscriptions.CompositeSubscription")){
-            throw new IllegalArgumentException("you must add rxjava and rxandroid library to this project");
-        }else{
+//        if(Utils.hasClass("rx.subscriptions.CompositeSubscription")){
             if (this.mCompositeSubscription == null) {
                 this.mCompositeSubscription = new CompositeSubscription();
             }
             this.mCompositeSubscription.add(s);
-        }
+//        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //恢复状态
-        if(Utils.hasClass("icepick.Icepick")){
-            Icepick.restoreInstanceState(this, savedInstanceState);
-        }
         mHandler=new WeakReferenceHandler(this);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //保存状态
-        if(Utils.hasClass("icepick.Icepick")){
-            Icepick.saveInstanceState(this, outState);
-        }
     }
 
     //-----------友盟统计-----start
     public void onResume() {
         super.onResume();
-        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
+//        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
             MobclickAgent.onResume(this); // 统计时长
-        }
+//        }
     }
 
     public void onPause() {
         super.onPause();
-        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
+//        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
             MobclickAgent.onPause(this);
-        }
+//        }
     }
     //-----------友盟统计-----end
 
@@ -87,7 +70,9 @@ public class ParentActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         //取消订阅，防止rx内存泄露
-        if (Utils.hasClass("rx.subscriptions.CompositeSubscription") && this.mCompositeSubscription != null) {
+        if (
+//                Utils.hasClass("rx.subscriptions.CompositeSubscription") &&
+                this.mCompositeSubscription != null) {
             this.mCompositeSubscription.unsubscribe();
             this.mCompositeSubscription=null;
         }

@@ -18,11 +18,11 @@ public abstract class BasePresenter<E, T> {
     public void bindVM(T v, E m) {
         this.mView = v;
         this.mModel = m;
-        //是否有导入rxjava/rxandroid
-        if(Utils.hasClass("rx.subscriptions.CompositeSubscription") &&
-           Utils.hasClass("rx.android.schedulers.AndroidSchedulers")){
+        //是否有导入rxjava/rxandroid-混淆后会出现找不到rx包的问题，因此不能使用判断
+//        if(Utils.hasClass("rx.subscriptions.CompositeSubscription") &&
+//           Utils.hasClass("rx.android.schedulers.AndroidSchedulers")){
             this.mRxFactory = new RxFactory();
-        }
+//        }
         this.subscribe();
     }
 
