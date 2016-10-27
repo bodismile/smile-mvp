@@ -41,9 +41,7 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
         //设置contentView
         setContentView(rootLayoutId());
         //设置视图注解
-        if(Utils.hasClass("butterknife.ButterKnife")){
-            ButterKnife.bind(this);
-        }
+        ButterKnife.bind(this);
         //通过反射获取presenter和Model
         mPresenter = Utils.getT(this, 0);
         mModel = Utils.getT(this, 1);
@@ -61,9 +59,7 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
         super.onDestroy();
         if (mPresenter != null)
             mPresenter.onDestroy();
-        if(Utils.hasClass("butterknife.ButterKnife")){
-            ButterKnife.unbind(this);
-        }
+        ButterKnife.unbind(this);
     }
 
     @Override

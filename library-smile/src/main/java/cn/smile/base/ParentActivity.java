@@ -36,12 +36,10 @@ public class ParentActivity extends AppCompatActivity {
      * @param s
      */
     protected void addSubscription(Subscription s) {
-//        if(Utils.hasClass("rx.subscriptions.CompositeSubscription")){
-            if (this.mCompositeSubscription == null) {
-                this.mCompositeSubscription = new CompositeSubscription();
-            }
-            this.mCompositeSubscription.add(s);
-//        }
+        if (this.mCompositeSubscription == null) {
+            this.mCompositeSubscription = new CompositeSubscription();
+        }
+        this.mCompositeSubscription.add(s);
     }
 
     @Override
@@ -53,16 +51,12 @@ public class ParentActivity extends AppCompatActivity {
     //-----------友盟统计-----start
     public void onResume() {
         super.onResume();
-//        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
-            MobclickAgent.onResume(this); // 统计时长
-//        }
+        MobclickAgent.onResume(this); // 统计时长
     }
 
     public void onPause() {
         super.onPause();
-//        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
-            MobclickAgent.onPause(this);
-//        }
+        MobclickAgent.onPause(this);
     }
     //-----------友盟统计-----end
 
@@ -70,10 +64,8 @@ public class ParentActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         //取消订阅，防止rx内存泄露
-        if (
-//                Utils.hasClass("rx.subscriptions.CompositeSubscription") &&
-                this.mCompositeSubscription != null) {
-            this.mCompositeSubscription.unsubscribe();
+        if (this.mCompositeSubscription != null) {
+            this.mCompositeSubscription.clear();
             this.mCompositeSubscription=null;
         }
         //取消handler订阅，防止内存泄露

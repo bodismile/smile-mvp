@@ -7,10 +7,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import cn.smile.SmileConfig;
 
@@ -19,6 +24,24 @@ import cn.smile.SmileConfig;
  * @author  smile
  */
 public final class Utils {
+
+    /**
+     * 检查网络是否可用
+     * @param context
+     * @return 返回网络是否可用
+     */
+    public static boolean hasNetwork(Context context) {
+        ConnectivityManager manager = (ConnectivityManager) context.getApplicationContext()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (manager == null) {
+            return false;
+        }
+        NetworkInfo networkinfo = manager.getActiveNetworkInfo();
+        if (networkinfo == null || !networkinfo.isAvailable()) {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * 将dip或dp值转换为px值，保证尺寸大小不变
@@ -183,6 +206,33 @@ public final class Utils {
             e.printStackTrace();
         }
         return pi;
+    }
+
+    /**
+     * 通用MD5加密
+     * @param string
+     * @return
+     */
+    public static String md5(String string) {
+        byte[] hash;
+        try {
+            hash = MessageDigest.getInstance("MD5").digest(string.getBytes("UTF-8"));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        StringBuilder hex = new StringBuilder(hash.length * 2);
+        for (byte b : hash) {
+            if ((b & 0xFF) < 0x10)
+                hex.append("0");
+            hex.append(Integer.toHexString(b & 0xFF));
+        }
+
+        return hex.toString();
     }
 
 }

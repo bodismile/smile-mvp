@@ -52,35 +52,28 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(Utils.hasClass("butterknife.ButterKnife")){
-            ButterKnife.bind(this,view);
-        }
+        ButterKnife.bind(this,view);
     }
 
     //-----------友盟统计-----start
     public void onResume() {
         super.onResume();
-//        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
-            MobclickAgent.onPageStart(getClass().getName()); //统计页面
-//        }
+        MobclickAgent.onPageStart(getClass().getName()); //统计页面
     }
 
     public void onPause() {
         super.onPause();
-//        if(Utils.hasClass("com.umeng.analytics.MobclickAgent")){
-            MobclickAgent.onPageEnd(getClass().getName());
-//        }
+        MobclickAgent.onPageEnd(getClass().getName());
     }
     //-----------友盟统计-----end
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mPresenter != null)
+        if (mPresenter != null){
             mPresenter.onDestroy();
-        if(Utils.hasClass("butterknife.ButterKnife")){
-            ButterKnife.unbind(this);
         }
+        ButterKnife.unbind(this);
         //取消handler订阅，防止内存泄露
         if(mHandler!=null){
             mHandler.removeCallbacksAndMessages(null);

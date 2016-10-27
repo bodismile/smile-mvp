@@ -112,9 +112,9 @@ public class SmileDialog extends DialogBase {
 			leftText = "";
 			rightText = "";
 			bgColor = ContextCompat.getDrawable(mContext, R.drawable.dialog_bg);
-			rightBtnColor = ContextCompat.getColor(mContext, R.color.color_blue);
-			leftBtnColor = ContextCompat.getColor(mContext, R.color.color_64);
-			titleColor = ContextCompat.getColor(mContext, R.color.color_1e1e1e);
+			rightBtnColor = context.getResources().getColor(R.color.color_blue);
+			leftBtnColor = context.getResources().getColor(R.color.color_64);
+			titleColor = context.getResources().getColor(R.color.color_1e1e1e);
 			height= WindowManager.LayoutParams.WRAP_CONTENT;
 			width = Utils.dip2px(mContext,300);
 			onClickListener=null;

@@ -27,13 +27,15 @@ public class RxFactory {
     }
 
     private static <T> Observable.Transformer<T, T> createSchedulers() {
+        //使用subscribeOn()切换线程的话，会在指定的线程上执行这个Observable，而且会改变创建Observable时所在的线程
+        //使用observeOn()方法切换线程后，观察者会在指定的线程上观察这个Observable，但这个方法并不会改变创建Observable时所在的线程
         return new  Observable.Transformer() {
             @Override
             public Object call(Object observable) {
                 return ((Observable)observable)
-                        .subscribeOn(Schedulers.io())
-                        .unsubscribeOn(Schedulers.computation())
-                        .observeOn(AndroidSchedulers.mainThread());
+                        .subscribeOn(Schedulers.io())//影响上游代码执行的线程，多次调用只有首次是有效的
+                        .unsubscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());//影响下游代码执行的线程，多次调用都会改变数据向下传递时所在的线程。
             }
         };
     }
@@ -73,7 +75,10 @@ public class RxFactory {
     }
 
     public void clear() {
-        mCompositeSubscription.unsubscribe();
+        if(mCompositeSubscription!=null){
+            mCompositeSubscription.clear();
+            mCompositeSubscription=null;
+        }
         for (Map.Entry<String, Observable<?>> entry : mObservables.entrySet()) {
             mRxBus.unregister(entry.getKey(), entry.getValue());
         }

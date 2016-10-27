@@ -127,7 +127,7 @@ public abstract class BaseActivityWithRefresh<T extends BasePresenter, E extends
     /**
      * 刷新完成动作
      */
-    public void refreshComplete() {
+    public void resetRefresh() {
         mHandler.postDelayed(new Runnable() {
 
             @Override
