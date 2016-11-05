@@ -14,7 +14,6 @@
         android:id="@id/refreshView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="@dimen/dimen_10"
         android:cacheColorHint="@color/color_transparent"
         android:divider="@null"
         android:fadingEdge="none"

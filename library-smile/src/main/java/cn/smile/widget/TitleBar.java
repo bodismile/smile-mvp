@@ -65,21 +65,21 @@ public class TitleBar extends RelativeLayout {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.TitleBar, 0, 0);
         try {
             //背景色
-            titleBg = ta.getColor(R.styleable.TitleBar_titleBg,getContext().getResources().getColor(R.color.color_theme));
+            titleBg = ta.getColor(R.styleable.TitleBar_titleBg,getContext().getResources().getColor(R.color.color_titlebar_bg));
             //标题
             titleText = ta.getString(R.styleable.TitleBar_titleText);
             titleSize = (int)ta.getDimension(R.styleable.TitleBar_titleSize, 18);
-            titleColor = ta.getColor(R.styleable.TitleBar_titleColor,getContext().getResources().getColor(R.color.color_white));
+            titleColor = ta.getColor(R.styleable.TitleBar_titleColor,getContext().getResources().getColor(R.color.color_titlebar_title));
             //返回
             leftVisible = ta.getBoolean(R.styleable.TitleBar_leftVisible, false);
             leftText = ta.getString(R.styleable.TitleBar_leftText);
             leftResId = ta.getResourceId(R.styleable.TitleBar_leftResId,R.drawable.selector_back);
-            leftTextColor = ta.getColor(R.styleable.TitleBar_leftTextColor,getContext().getResources().getColor(R.color.color_white));
+            leftTextColor = ta.getColor(R.styleable.TitleBar_leftTextColor,getContext().getResources().getColor(R.color.color_titlebar_left));
             leftTextSize = (int)ta.getDimension(R.styleable.TitleBar_leftTextSize,16);
             //更多
             rightResId = ta.getResourceId(R.styleable.TitleBar_rightResId, 0);
             rightText = ta.getString(R.styleable.TitleBar_rightText);
-            rightTextColor = ta.getColor(R.styleable.TitleBar_rightTextColor, getContext().getResources().getColor(R.color.color_white));
+            rightTextColor = ta.getColor(R.styleable.TitleBar_rightTextColor, getContext().getResources().getColor(R.color.color_titlebar_right));
             rightTextSize = (int)ta.getDimension(R.styleable.TitleBar_rightTextSize,16);
         } finally {
             ta.recycle();

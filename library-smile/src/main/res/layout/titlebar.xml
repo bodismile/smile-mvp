@@ -4,7 +4,7 @@
     android:id="@+id/rl_titlebar"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:background="@color/color_theme">
+    android:background="@color/color_titlebar_bg">
 
     <LinearLayout
         android:id="@+id/ll_left"
@@ -29,7 +29,7 @@
             android:layout_gravity="center_vertical"
             android:textSize="@dimen/font_16"
             tools:text="返回"
-            android:textColor="@color/color_white"/>
+            android:textColor="@color/color_titlebar_left"/>
 
     </LinearLayout>
 
@@ -40,7 +40,7 @@
         android:layout_centerInParent="true"
         android:textSize="@dimen/font_18"
         tools:text="标题"
-        android:textColor="@color/color_black"/>
+        android:textColor="@color/color_titlebar_title"/>
 
     <LinearLayout
         android:id="@+id/ll_right"
@@ -64,7 +64,7 @@
             android:layout_gravity="center_vertical"
             android:textSize="@dimen/font_16"
             tools:text="more"
-            android:textColor="@color/color_black"/>
+            android:textColor="@color/color_titlebar_right"/>
 
     </LinearLayout>
 

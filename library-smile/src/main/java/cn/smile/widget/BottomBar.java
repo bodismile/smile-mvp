@@ -20,6 +20,8 @@ public class BottomBar extends LinearLayout {
 	private Context mContext;
 	private LayoutInflater inflater;
 
+	View convertView;
+
 	private int[] optionsBgNormal;
 	private int[] optionsBgActive;
 
@@ -53,7 +55,7 @@ public class BottomBar extends LinearLayout {
 
 	private void initViews() {
 		//custom_table和custom_table1均可以实现底部按钮凸出的效果
-		View convertView = inflater.inflate(R.layout.custom_table1, this);
+		convertView= inflater.inflate(R.layout.custom_table1, this);
 		optionImageViews = new ImageView[OPTION_NUM];
 		optionLayouts = new LinearLayout[OPTION_NUM];
 		optionTextViews = new TextView[OPTION_NUM];
@@ -107,6 +109,21 @@ public class BottomBar extends LinearLayout {
 		if (mOnTableClickListener != null) {
 			mOnTableClickListener.onTableClick(choice);
 		}
+	}
+
+	/**
+	 * 设置背景色
+	 */
+	public void setBackgroundColor(int resColor){
+		convertView.setBackgroundColor(resColor);
+	}
+
+	/**
+	 * 设置背景色
+	 * @param resId
+     */
+	public void setBackgroundResource(int resId){
+		convertView.setBackgroundResource(resId);
 	}
 
 	/**点击效果的实现
