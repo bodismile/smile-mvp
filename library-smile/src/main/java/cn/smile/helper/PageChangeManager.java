@@ -42,4 +42,13 @@ public class PageChangeManager {
      */
     public void onSwitch(int page){ listener.onChange(page); }
 
+    /**
+     * 清空资源
+     */
+    public void clear(){
+        if(sInstance!=null){
+            sInstance=null;
+        }
+    }
+
 }

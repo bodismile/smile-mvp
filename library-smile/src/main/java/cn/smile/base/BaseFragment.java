@@ -178,10 +178,14 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
      * @param msg log内容
      */
     public static void log(String msg){
-        if(!TextUtils.isEmpty(msg)){
-            SLog.i(msg);
-        }else{
-            SLog.i("msg is null,stop log");
+        try {
+            if(!TextUtils.isEmpty(msg)){
+                SLog.i(msg);
+            }else{
+                SLog.i("msg is null,stop log");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -200,9 +204,7 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
     /**
      * @param message
      */
-    public void processMessage(Message message) {
-
-    }
+    public void processMessage(Message message) {}
 
     static class WeakReferenceHandler extends Handler {
 

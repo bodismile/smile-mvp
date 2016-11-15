@@ -114,10 +114,14 @@ public class ParentActivity extends AppCompatActivity {
      * @param msg
      */
     public static void log(String msg){
-        if(!TextUtils.isEmpty(msg)){
-            SLog.i(msg);
-        }else{
-            SLog.i("log msg is null");
+        try {
+            if(!TextUtils.isEmpty(msg)){
+                SLog.i(msg);
+            }else{
+                SLog.i("log msg is null");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -1,16 +1,29 @@
 package cn.smile.base;
 
 import android.os.Message;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.smile.R;
 import cn.smile.base.mvp.BaseModel;
 import cn.smile.base.mvp.BasePresenter;
+import cn.smile.listener.OnPullRefreshListener;
+import cn.smile.util.SLog;
 import cn.smile.widget.MultiStateView;
+import io.nlopez.smartadapters.adapters.MultiAdapter;
+
+import static cn.smile.widget.MultiStateView.VIEW_STATE_CONTENT;
+import static cn.smile.widget.MultiStateView.VIEW_STATE_ERROR;
 
 /**封装上下拉刷新GridView的Fragment
  * @author smile
@@ -53,8 +66,8 @@ import cn.smile.widget.MultiStateView;
 
 </cn.smile.widget.MultiStateView>
  */
-public abstract class BaseFragmentWithGridRefresh<T extends BasePresenter, E extends BaseModel>
-        extends LazyFragment<T,E> implements PullToRefreshBase.OnRefreshListener2{
+public abstract class BaseFragmentWithGridRefresh<T extends BasePresenter, E extends BaseModel,D>
+        extends LazyFragment<T,E> implements PullToRefreshBase.OnRefreshListener2,OnPullRefreshListener {
 
     /**
      * 上下拉刷新view
@@ -65,8 +78,11 @@ public abstract class BaseFragmentWithGridRefresh<T extends BasePresenter, E ext
      */
     MultiStateView multiStateView;
 
+    LayoutInflater mInflater;
+
     @Override
     public void initView(LayoutInflater inflater) {
+        mInflater =inflater;
         //初始化状态View
         multiStateView = getView(R.id.multiStateView);
         //初始化listview
@@ -75,6 +91,11 @@ public abstract class BaseFragmentWithGridRefresh<T extends BasePresenter, E ext
         refreshView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         //设置加载监听器
         refreshView.setOnRefreshListener(this);
+        //初始化Adapter
+        isFirstLoading = true;
+        mAdapter = initAdapter();
+        //设置adapter
+        refreshView.getRefreshableView().setAdapter(mAdapter);
     }
 
     /**
@@ -151,4 +172,169 @@ public abstract class BaseFragmentWithGridRefresh<T extends BasePresenter, E ext
         }, 500);
     }
 
+    /**
+     * 空布局
+     */
+    private View emptyView;
+    /**
+     * 适配器
+     */
+    private MultiAdapter mAdapter;
+    /**
+     * 是否是初始加载
+     */
+    private boolean isFirstLoading=true;
+    /**
+     * 总数
+     */
+    private int total = -1;
+
+    /**
+     * 设置空视图布局
+     * @return
+     */
+    public int emptyViewId(){
+        return 0;
+    }
+
+    /**
+     * EmptyView初始化完成
+     */
+    public void initEmptyViewFinish(){}
+
+    /**
+     * 获取空视图
+     * @return
+     */
+    public View getEmptyView(){
+        return emptyView;
+    }
+
+    /**
+     * 显示空视图
+     */
+    private void showEmptyView() {
+        if(emptyView==null){
+            initEmptyView(mInflater);
+        }
+        if(emptyView.getVisibility()!=View.VISIBLE){
+            emptyView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * 隐藏空视图
+     */
+    public void hideEmptyView() {
+        if(emptyView!=null && emptyView.getVisibility()!=View.GONE)
+            emptyView.setVisibility(View.GONE);
+    }
+
+    /**
+     * 初始化EmptyView
+     */
+    private void initEmptyView(LayoutInflater inflater){
+        int id = emptyViewId();
+        if(id>0){
+            emptyView = inflater.inflate(id,null);
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
+            multiStateView.addView(emptyView,lp);
+            initEmptyViewFinish();
+        }
+    }
+
+    /**
+     * 初始化适配器
+     * @return
+     */
+    public abstract MultiAdapter initAdapter();
+
+    /**
+     * @return
+     */
+    public MultiAdapter getAdapter(){
+        return mAdapter;
+    }
+
+    /**
+     * 设置List总数
+     * @param total
+     */
+    public void setTotal(int total){
+        this.total = total;
+    }
+
+    /**
+     * @return
+     */
+    public int getTotal(){
+        return total;
+    }
+
+    @Override
+    public void onPullDownToRefresh(PullToRefreshBase pullToRefreshBase) {
+        hideEmptyView();
+        onPullDownTo(pullToRefreshBase);
+    }
+
+    @Override
+    public void onPullUpToRefresh(PullToRefreshBase pullToRefreshBase) {
+        if(total<0){
+            throw new IllegalStateException("you must call setTotal(int total) method before pull up to refresh");
+        }else{
+            int curCount = mAdapter.getCount();
+            if(total>curCount){
+                onPullUpTo(pullToRefreshBase);
+            }else{
+                toast("数据已全部加载");
+                resetRefresh();
+            }
+        }
+    }
+
+    /**
+     * 成功回调
+     * @param page
+     * @param list
+     */
+    public void onSuccess(int page, List<D> list){
+        if(page==1){//首页
+            getMultiStateView().setViewState(VIEW_STATE_CONTENT);
+            mAdapter.clearItems();
+            if(list!=null && list.size()>0){//有数据
+                mAdapter.setItems(list);
+                if(list.size()< 10){//如果一页就加载完了数据
+                    setStartMode();
+                }else{
+                    setBothMode();
+                }
+            }else{//无数据
+                showEmptyView();
+                setStartMode();
+            }
+        }else{//加载更多
+            mAdapter.addItems(list);
+            setBothMode();
+        }
+        if(isFirstLoading){
+            isFirstLoading=false;
+        }else{
+            resetRefresh();
+        }
+    }
+
+    /**
+     * 错误回调
+     */
+    public void onFail(int page,Throwable e){
+        if (page == 1) {
+            getMultiStateView().setViewState(VIEW_STATE_ERROR);
+        }else{
+            if(e!=null){
+                SLog.e(e.getMessage());
+                toast(e.getMessage());
+            }
+        }
+        resetRefresh();
+    }
 }

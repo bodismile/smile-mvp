@@ -33,7 +33,6 @@ public final class DialogHelper {
     public static void showLoadingsDialog(Context context, String msg){
         try {
             dialog = new Dialog(context, R.style.CustomProgressDialog);
-            dismissLoadingDialog();
             View view = LayoutInflater.from(context).inflate(R.layout.dialog_circular_progress, null);
             TextView tv = (TextView) view.findViewById(R.id.tv_message);
             if(TextUtils.isEmpty(msg)){
@@ -65,6 +64,7 @@ public final class DialogHelper {
     public static void dismissLoadingDialog(){
         if (null != dialog && dialog.isShowing()) {
             dialog.dismiss();
+            dialog=null;
         }
     }
 

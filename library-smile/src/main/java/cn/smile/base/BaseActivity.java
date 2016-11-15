@@ -51,6 +51,7 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
         if(mPresenter!=null && mModel!=null){
             mPresenter.bindVM(this,mModel);
         }
+        //初始化Data
         this.initData();
     }
 

@@ -60,10 +60,21 @@ public class WebViewActivity extends BaseActivityWithNavi {
             }
         });
         String link = getBundle().getString("link");
-        if(link.startsWith("http")){
-            webView.loadUrl(link);
-        }else{
-            webView.loadUrl("https://"+link);
+        webView.loadUrl(link);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            if(webView!=null){
+                webView.removeAllViews();
+                webView.clear();
+                webView.destroy();
+                webView=null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

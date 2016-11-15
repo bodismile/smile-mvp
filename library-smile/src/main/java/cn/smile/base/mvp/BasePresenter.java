@@ -23,8 +23,8 @@ public abstract class BasePresenter<E, T> {
     public abstract void subscribe();
 
     public void onDestroy() {
-        if(mRxFactory!=null){
-            mRxFactory.clear();
-        }
+        if(mRxFactory!=null) mRxFactory.clear();
+        if(mView!=null) mView=null;
+        if(mModel!=null) mModel=null;
     }
 }
