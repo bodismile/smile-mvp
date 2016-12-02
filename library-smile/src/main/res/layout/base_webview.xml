@@ -12,11 +12,10 @@
         android:max="100"
         android:progressDrawable="@drawable/progress_horizontal" />
 
-    <cn.smile.widget.WebViewBase
+    <com.github.lzyzsd.jsbridge.BridgeWebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:scrollbars="none" />
+        android:layout_height="match_parent" >
+    </com.github.lzyzsd.jsbridge.BridgeWebView>
 
 </LinearLayout>

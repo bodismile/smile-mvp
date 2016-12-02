@@ -20,7 +20,7 @@ import cn.smile.widget.MultiStateView;
  * @date 2015-08-18-15:33
  * 布局文件如下：
 <?xml version="1.0" encoding="utf-8"?>
-<com.kennyc.view.MultiStateView xmlns:android="http://schemas.android.com/apk/res/android"
+<cn.smile.widget.MultiStateView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@id/multiStateView"
     android:background="#fafafa"
@@ -45,7 +45,7 @@ import cn.smile.widget.MultiStateView;
         android:scrollbars="none" />
     </cn.bingoogolapple.refreshlayout.BGARefreshLayout>
 
-</com.kennyc.view.MultiStateView>
+</cn.smile.widget.MultiStateView>
  */
 public abstract class BaseFragmentWithBGARefresh <T extends BasePresenter, E extends BaseModel>
         extends LazyFragment<T,E> implements BGARefreshLayout.BGARefreshLayoutDelegate,BGAOnRVItemClickListener {

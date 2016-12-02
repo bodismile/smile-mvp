@@ -1,27 +1,39 @@
 package cn.smile.base;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.webkit.WebSettings;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
 import android.widget.ProgressBar;
 
+import com.github.lzyzsd.jsbridge.BridgeHandler;
+import com.github.lzyzsd.jsbridge.BridgeWebView;
+import com.github.lzyzsd.jsbridge.BridgeWebViewClient;
+import com.github.lzyzsd.jsbridge.CallBackFunction;
+import com.github.lzyzsd.jsbridge.DefaultHandler;
+
 import cn.smile.R;
-import cn.smile.widget.WebViewBase;
 
 /**查看网页
  * @author smile
- * @date 2015-09-24-17:36
  */
 public class WebViewActivity extends BaseActivityWithNavi {
 
+    String url;
+    BridgeWebView  webView;
+    ProgressBar mProgressBar;
+
     @Override
     protected String title() {
+        url = getBundle().getString("link");
         String title = getBundle().getString("title");
         if(!TextUtils.isEmpty(title)){
             return title;
         }else{
-            return getString(R.string.app_name);
+            return getString(cn.smile.R.string.app_name);
         }
     }
 
@@ -35,32 +47,46 @@ public class WebViewActivity extends BaseActivityWithNavi {
         return inflater.inflate(R.layout.base_webview,null);
     }
 
-    WebViewBase webView;
-    ProgressBar mProgressBar;
-
     @Override
     public void initView(){
         super.initView();
-        webView = (WebViewBase)findView(R.id.webView);
-        mProgressBar = (ProgressBar)findView(R.id.progress);
-        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        webView.requestFocus();
-        webView.setOnPageFinishedListener(new WebViewBase.OnPageFinishedListener() {
+        webView = (BridgeWebView)findView(R.id.webView);
+        mProgressBar = (ProgressBar)findView(cn.smile.R.id.progress);
+        webView.setDefaultHandler(new DefaultHandler());
+        webView.setWebChromeClient(new WebChromeClient() {
 
             @Override
-            public void OnPageFinished(String url) {
-                mProgressBar.setVisibility(View.GONE);
-            }
-        });
-        webView.setOnProgressListener(new WebViewBase.OnProgressListener() {
-
-            @Override
-            public void onProgress(int newProgress) {
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
                 mProgressBar.setProgress(newProgress);
             }
         });
-        String link = getBundle().getString("link");
-        webView.loadUrl(link);
+        webView.setWebViewClient(new BridgeWebViewClient(webView){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                mProgressBar.setVisibility(View.GONE);
+            }
+        });
+        //注册js内部方法，响应js的点击事件
+        webView.registerHandler("visit", new BridgeHandler() {
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                visitBrowser();
+            }
+        });
+        webView.loadUrl(url);
+    }
+
+    /**
+     *  访问浏览器
+     */
+    public void visitBrowser() {
+        Intent intent= new Intent();
+        intent.setAction("android.intent.action.VIEW");
+        Uri content_url = Uri.parse(url);
+        intent.setData(content_url);
+        startActivity(intent);
     }
 
     @Override
@@ -69,7 +95,6 @@ public class WebViewActivity extends BaseActivityWithNavi {
         try {
             if(webView!=null){
                 webView.removeAllViews();
-                webView.clear();
                 webView.destroy();
                 webView=null;
             }
@@ -78,3 +103,4 @@ public class WebViewActivity extends BaseActivityWithNavi {
         }
     }
 }
+
